@@ -1,0 +1,20 @@
+import math
+from PIL import Image
+import numpy as np
+from BaxterAgent import BaxterAgent
+start_pose = {'Loc':{"X":-1006, "Y":-10, "Z":130}, 'Theta':-1/2.0*math.pi}
+agent = BaxterAgent(start_pose)
+agent.start()
+
+agent.reset()
+action = {
+ 		"left_arm": [1, 0, 0, 0, 0, 0, 0],
+		"right_arm": [0, 0, 0, 0, 0, 0, 0],
+		"move_X": 0, 
+		"move_Y": 0,
+ 		"rotation": 1
+ 		}
+data = agent.step(action)
+
+rgb = Image.fromarray(data['rgb'])
+rgb.show()
