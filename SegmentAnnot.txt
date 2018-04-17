@@ -1,0 +1,12 @@
+0	doing nothing
+3892	open cabinet
+4826	take out carrot
+5704	place carrot on board
+6836	cut carrot
+7950	add to pan
+8888	fry
+11076	take plate
+12026	place on plate
+14082	put back plate
+14900	doing nothing
+end
