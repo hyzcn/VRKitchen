@@ -40,7 +40,7 @@ void ATouchGameModePlay::BeginPlay()
 	if (BaxterRobot == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("Can't find robot"));
 
-	UpdateInterval = 0.02;
+	UpdateInterval = 0.01;
 	RecordApplied = 0;
 
 	FTimerHandle ReceiverHandler;

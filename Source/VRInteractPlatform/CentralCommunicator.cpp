@@ -29,7 +29,8 @@ void ACentralCommunicator::BeginPlay()
 	
 	SocketInit();
 	BuildListenerConnection();
-	
+
+	/*
 	while (true)
 	{
 		if (SocketConnect())
@@ -40,7 +41,13 @@ void ACentralCommunicator::BeginPlay()
 		}
 
 	}
+	*/
 
+	if (SocketConnect())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Sender connected!")));
+		Connected = true;
+	}
 
 	// Trace of Robots in level
 	TArray<AActor*> FoundActors;

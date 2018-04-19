@@ -20,25 +20,25 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaTimeX) override;
 	
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		FTransform HeadWorldTransform;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		FVector LeftHandWorldPos;
 	
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		FVector RightHandWorldPos;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		FRotator LeftHandWorldRot;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		FRotator RightHandWorldRot;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		float Speed;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Avateering")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		float Direction;
 
 
