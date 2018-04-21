@@ -296,7 +296,7 @@ void AIKPawn::AnimRecord(FString &PoseData)
 	// Actor Pose
 	Value OJActor(kObjectType);
 	FVector Loc = GetActorLocation();
-	UE_LOG(LogTemp, Warning, TEXT("actor location %s"), *Loc.ToString());
+	// UE_LOG(LogTemp, Warning, TEXT("actor location %s"), *Loc.ToString());
 
 	FRotator Rot = GetActorRotation();
 	OJActor.AddMember("ActorLoc", VectorMaker(Loc, doc), doc.GetAllocator());

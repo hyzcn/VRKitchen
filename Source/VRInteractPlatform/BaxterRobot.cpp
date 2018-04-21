@@ -440,8 +440,8 @@ void ABaxterRobot::AnimRecord(FString &PoseData)
 		UStaticMeshComponent* MeshComp = Mesh.Value;
 		FVector Loc = MeshComp->GetComponentLocation();
 		FRotator Rot = MeshComp->GetComponentRotation();
-		if (MeshName == "base")
-			UE_LOG(LogTemp, Warning, TEXT("Base Location %s"), *Loc.ToString());
+		// if (MeshName == "base")
+		//	UE_LOG(LogTemp, Warning, TEXT("Base Location %s"), *Loc.ToString());
 
 		Value OJBaxterPart(kObjectType);
 		OJBaxterPart.AddMember("loc", VectorMakerJson(Loc, doc), doc.GetAllocator());
