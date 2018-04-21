@@ -58,8 +58,8 @@ AIKPawn::AIKPawn()
 	MotionController_R->SetupAttachment(RootComponent);
 	MotionController_L->SetupAttachment(RootComponent);
 	
-	MovementSpeed = 150;
-	TurnSpeed = 100;
+	MovementSpeed = 100;
+	TurnSpeed = 500;
 	UpdateInterval = 0.01;
 	// PoseRecord = true;
 	// PoseData = "";
@@ -118,13 +118,16 @@ void AIKPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 	InputComponent->BindAction("GrabRight", EInputEvent::IE_Pressed, this, &AIKPawn::GrabRight);
 	InputComponent->BindAction("GrabRight", EInputEvent::IE_Released, this, &AIKPawn::ReleaseRight);
 	InputComponent->BindAxis("MoveForward", this, &AIKPawn::ProcessForward);
-	InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
+	// InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
 	InputComponent->BindAxis("Turn", this, &AIKPawn::ProcessRotate);
 }
 
 void AIKPawn::ProcessForward(float AxisValue)
 {
-	MovementInput.X = AxisValue;
+	if (AxisValue > 0.6)
+		MovementInput.X = AxisValue;
+	else
+		MovementInput.X = 0;
 }
 
 void AIKPawn::ProcessRight(float AxisValue)
@@ -153,7 +156,7 @@ void AIKPawn::UpdateMoveAnim()
 	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
 	
 	FRotator NewRotation = GetActorRotation();
-	NewRotation.Yaw += TurnSpeed * RotationInput * UpdateInterval; //DeltaTime;
+	NewRotation.Yaw += TurnSpeed * RotationInput * UpdateInterval; //DeltaTime
 	SetActorRotation(NewRotation);
 	FVector DisplacementVector = FVector(0, 0, 0);
 	DisplacementVector = GetActorForwardVector() * MovementInput.X + GetActorRightVector() * MovementInput.Y;
