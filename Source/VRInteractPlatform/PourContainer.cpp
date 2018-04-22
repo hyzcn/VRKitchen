@@ -29,7 +29,7 @@ void APourContainer::BeginPlay()
 	Super::BeginPlay();
 
 	FluidMaterialRef = FillMesh->CreateAndSetMaterialInstanceDynamic(0);
-	FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
+	// FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
 	FluidParticles->SetColorParameter(FName("FluidColor"), FluidColor);
 	FluidParticles->SetFloatParameter(FName("MouthRadius"), MouthRadius);
 }
