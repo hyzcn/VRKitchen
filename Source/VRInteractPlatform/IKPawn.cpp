@@ -118,13 +118,13 @@ void AIKPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 	InputComponent->BindAction("GrabRight", EInputEvent::IE_Pressed, this, &AIKPawn::GrabRight);
 	InputComponent->BindAction("GrabRight", EInputEvent::IE_Released, this, &AIKPawn::ReleaseRight);
 	InputComponent->BindAxis("MoveForward", this, &AIKPawn::ProcessForward);
-	// InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
+	InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
 	InputComponent->BindAxis("Turn", this, &AIKPawn::ProcessRotate);
 }
 
 void AIKPawn::ProcessForward(float AxisValue)
 {
-	if (AxisValue > 0.6)
+	if (AxisValue > 0.6 || AxisValue < -0.6)
 		MovementInput.X = AxisValue;
 	else
 		MovementInput.X = 0;
@@ -132,7 +132,10 @@ void AIKPawn::ProcessForward(float AxisValue)
 
 void AIKPawn::ProcessRight(float AxisValue)
 {
-	MovementInput.Y = AxisValue;
+	if (AxisValue > 0.6 || AxisValue < -0.6)
+		MovementInput.Y = AxisValue;
+	else
+		MovementInput.Y = 0;
 }
 
 void AIKPawn::ProcessRotate(float AxisValue)
