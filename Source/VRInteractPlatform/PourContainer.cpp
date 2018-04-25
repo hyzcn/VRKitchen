@@ -17,7 +17,9 @@ APourContainer::APourContainer()
 	RootComponent = ContainerMesh;
 	UpArrow->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 	FluidParticles->AttachToComponent(UpArrow, FAttachmentTransformRules::KeepWorldTransform);
-	FluidParticles->Deactivate();
+
+	// FluidParticles->Deactivate();
+	FluidParticles->Activate();
 
 	RemainingFluid = 0.05;
 	FlowRate = 0.1;
@@ -29,9 +31,12 @@ void APourContainer::BeginPlay()
 	Super::BeginPlay();
 
 	FluidMaterialRef = FillMesh->CreateAndSetMaterialInstanceDynamic(0);
-	// FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
+	FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
+	FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), 0.5);
+
 	FluidParticles->SetColorParameter(FName("FluidColor"), FluidColor);
 	FluidParticles->SetFloatParameter(FName("MouthRadius"), MouthRadius);
+	RecieveFluid(FluidColor, 0.5, TEXT("Coffee"));
 }
 
 // Called every frame
