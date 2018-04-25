@@ -16,12 +16,14 @@ public class VRInteractPlatform : ModuleRules
             "Sockets", 
             "Networking", 
             "ImageWrapper", 
-            "CinematicCamera"}
+            "CinematicCamera",
+        }
             );
 
         PrivateIncludePaths.AddRange(
             new string[] {
-                "VRInteractPlatform/cnpy"
+                "VRInteractPlatform/cnpy",
+                "ProceduralMeshComponent"
             }
         );
         PublicIncludePathModuleNames.AddRange(

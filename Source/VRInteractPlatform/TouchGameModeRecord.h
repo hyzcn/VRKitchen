@@ -10,17 +10,20 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 #include "BaxterRobot.h"
+#include "ProceduralMeshComponent.h"
 #include "IKPawn.h"
+#include "OnOffObject.h"
+#include "PickCookCutObject.h"
 #include "TouchGameModeRecord.generated.h"
 
 /**
- * 
- */
+*
+*/
 UCLASS()
 class VRINTERACTPLATFORM_API ATouchGameModeRecord : public AGameMode
 {
 	GENERATED_BODY()
-	
+
 public:
 	ATouchGameModeRecord();
 
@@ -30,12 +33,21 @@ public:
 	void RecordActors();
 
 private:
-	AStaticMeshActor* Door;
+	Document doc;
 	bool PoseRecord;
 	FString PoseData;
+	FString ObjData;
 	FString GameDir;
 	FString FileName;
+	FString FileNameObj;
 	AIKPawn* HumanPawn;
 	ABaxterRobot* BaxterRobot;
+	APickCookCutObject* Carrot;
+	UProceduralMeshComponent* CarrotMesh;
+	AOnOffObject* Stove;
+	AOnOffObject* CabinetDoor;
+	AStaticMeshActor* Plate;
+	AStaticMeshActor* Knife;
 	float RecordInterval;
+	void RecordObjData(FString &Pose);
 };

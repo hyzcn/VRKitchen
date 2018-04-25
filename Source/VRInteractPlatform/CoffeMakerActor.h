@@ -66,11 +66,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "CoffeeMaker", Meta = (BlueprintProtected = "true"))
 		FString Item_ID;
 
-
+	UFUNCTION(BlueprintCallable, Category = "CoffeeMaker")
 	FORCEINLINE bool GetPowerStatus() const {
 		return bIsOn;
 	}
 
+	UFUNCTION(BlueprintCallable, Category = "CoffeeMaker")
 	FORCEINLINE bool GetIsPouringCoffee() const {
 		return bIsPouringCoffee;
 	}
