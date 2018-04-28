@@ -14,6 +14,8 @@
 #include "IKPawn.h"
 #include "OnOffObject.h"
 #include "PickCookCutObject.h"
+#include "CoffeMakerActor.h"
+#include "PourContainer.h"
 #include "TouchGameModeRecord.generated.h"
 
 /**
@@ -48,6 +50,8 @@ private:
 	AOnOffObject* CabinetDoor;
 	AStaticMeshActor* Plate;
 	AStaticMeshActor* Knife;
+	ACoffeMakerActor* CofMaker;
+	APourContainer* Cup;
 	float RecordInterval;
 	void RecordObjData(FString &Pose);
 };

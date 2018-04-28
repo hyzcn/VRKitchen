@@ -11,6 +11,7 @@ ACoffeMakerActor::ACoffeMakerActor()
 
 	bIsOn = false;
 	bIsPouringCoffee = false;
+	bIsBrewing = false;
 	MaterialIndex = 4;
 	NozzleSize = 1.f;
 
@@ -34,6 +35,7 @@ ACoffeMakerActor::ACoffeMakerActor()
 	LightTimer = 0;
 	CoffeeTimer = 0;
 	PourTime = 5;
+	BrewTime = 40;
 }
 
 // Called when the game starts or when spawned
@@ -74,15 +76,17 @@ void ACoffeMakerActor::Tick(float DeltaTime)
 	if (bIsPouringCoffee)
 	{
 		CoffeeTimer += DeltaTime;
-		if (CoffeeTimer < 5.f)
+		if (CoffeeTimer < BrewTime)
 		{
 			//do nothing, just brewing
 			//UE_LOG(LogTemp, Warning, TEXT("Brewing the coffee!"));
+			bIsBrewing = true;
 		}
-		else if (CoffeeTimer < 5.f + PourTime)
+		else if (CoffeeTimer < BrewTime + PourTime)
 		{
 			CoffeeNozzle->Activate();
 			CoffeeNozzle->PourFluid(CoffeeColor, DeltaTime * 0.1);
+			bIsBrewing = false;
 			//UE_LOG(LogTemp, Warning, TEXT("Pouring the coffee!"));
 		}
 		else
@@ -91,6 +95,7 @@ void ACoffeMakerActor::Tick(float DeltaTime)
 			CoffeeNozzle->Deactivate();
 			CoffeeTimer = 0.f;
 			bIsPouringCoffee = false;
+			bIsBrewing = false;
 			//UE_LOG(LogTemp, Warning, TEXT("Finished Coffee"));
 		}
 	}

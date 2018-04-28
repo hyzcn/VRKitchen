@@ -51,7 +51,7 @@ public:
 	void UpdateAnim(FString record);
 	void UpdateActor(Document &doc);
 	void UpdateHead(Document &doc);
-	void UpdateHand(Document &doc);
+	void UpdateBody(Document &doc);
 
 private:
 	bool RecordTrigger;

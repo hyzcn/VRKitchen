@@ -64,6 +64,12 @@ void ATouchGameModeRecord::BeginPlay()
 	for (TObjectIterator<AIKPawn> ActorItr; ActorItr; ++ActorItr)
 		HumanPawn = *ActorItr;
 
+	for (TObjectIterator<ACoffeMakerActor> ActorItr; ActorItr; ++ActorItr)
+		CofMaker = *ActorItr;
+
+	for (TObjectIterator<APourContainer> ActorItr; ActorItr; ++ActorItr)
+		Cup = *ActorItr;
+
 	for (TObjectIterator<APickCookCutObject> ActorItr; ActorItr; ++ActorItr)
 	{
 		Carrot = *ActorItr;
@@ -136,6 +142,8 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 	Value CarrotData(kObjectType);
 	Value CabinetData(kObjectType);
 	Value StoveData(kObjectType);
+	Value CofMakerData(kObjectType);
+	Value CupData(kObjectType);
 
 	if (Carrot && CarrotMesh)
 	{
@@ -160,6 +168,21 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 		StoveData.AddMember("On", Stove->on, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Stove", StoveData, doc.GetAllocator());
+
+	if (CofMaker)
+	{
+		CofMakerData.AddMember("Power", CofMaker->GetPowerStatus(), doc.GetAllocator());
+		CofMakerData.AddMember("IsPouring", CofMaker->GetIsPouringCoffee(), doc.GetAllocator());
+		CofMakerData.AddMember("IsBrewing", CofMaker->GetIsBrewing(), doc.GetAllocator());
+	}
+	ObjectData.AddMember("CoffeeMaker", CofMakerData, doc.GetAllocator());
+
+	if (Cup)
+	{
+		CupData.AddMember("FillFraction", Cup->CurrentFillFraction, doc.GetAllocator());
+	}
+	ObjectData.AddMember("Cup", CupData, doc.GetAllocator());
+
 
 	StringBuffer buffer;
 	Writer<StringBuffer> writer(buffer);

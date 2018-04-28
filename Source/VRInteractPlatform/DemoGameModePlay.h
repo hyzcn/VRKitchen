@@ -24,6 +24,7 @@ class VRINTERACTPLATFORM_API ADemoGameModePlay : public AGameMode
 public:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void Tick(float DeltaSeconds) override;
 	void UpdateAnim();
 	void SegmentRecord();
 	void TriggerPause();

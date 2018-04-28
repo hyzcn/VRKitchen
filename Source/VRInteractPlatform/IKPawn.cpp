@@ -147,8 +147,6 @@ void AIKPawn::UpdateAnim(FString &PoseData)
 {
 	UpdateMoveAnim();
 	UpdateBodyAnim();
-	LeftGrab = false; RightGrab = false;
-	LeftRelease = false; RightRelease = false;
 	FireGrabEventsLeft(LeftGrabPress);
 	FireGrabEventsRight(RightGrabPress);
 	AnimRecord(PoseData);

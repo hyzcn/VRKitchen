@@ -187,9 +187,10 @@ void ATouchAnimateActor::UpdateAnim(FString record)
 		{
 			// UE_LOG(LogTemp, Warning, TEXT("Update anim instance!!!"));
 			UpdateActor(doc);
-			UpdateHead(doc);
-			UpdateHand(doc);
+			// UpdateHead(doc);
+			UpdateBody(doc);
 		}
+
 }
 
 void ATouchAnimateActor::UpdateActor(Document &doc)
@@ -212,21 +213,28 @@ void ATouchAnimateActor::UpdateHead(Document &doc)
 	AnimInstance->HeadWorldTransform = TransformMaker(d["HeadWorldTransform"].GetObject());
 }
 
-void ATouchAnimateActor::UpdateHand(Document &doc)
+void ATouchAnimateActor::UpdateBody(Document &doc)
 {
 	Document d;
-	d = ParsedDoc(doc["LeftHandGrab"].GetObject());
+
+	// Left hand pose
+	d = ParsedDoc(doc["LeftHandPose"].GetObject());
+	AnimInstance->LeftHandWorldRot = RotatorMaker(d["LeftHandWorldRot"].GetObject());
+	AnimInstance->LeftHandWorldPos = VectorMaker(d["LeftHandWorldPos"].GetObject());
+
+	// Right hand pose
+	d = ParsedDoc(doc["RightHandPose"].GetObject());
+	AnimInstance->RightHandWorldRot = RotatorMaker(d["RightHandWorldRot"].GetObject());
+	AnimInstance->RightHandWorldPos = VectorMaker(d["RightHandWorldPos"].GetObject());
+
+	UpdateHead(doc);
 
 	// Left hand grab
+	d = ParsedDoc(doc["LeftHandGrab"].GetObject());
 	if (d["LeftGrab"].GetBool())
 		Grab(true);
 	if (d["LeftRelease"].GetBool())
 		Release(true);
-
-	// Left hand pose
-	d = ParsedDoc(doc["LeftHandPose"].GetObject());
-	AnimInstance->LeftHandWorldPos = VectorMaker(d["LeftHandWorldPos"].GetObject());
-	AnimInstance->LeftHandWorldRot = RotatorMaker(d["LeftHandWorldRot"].GetObject());
 
 	// Right hand grab
 	d = ParsedDoc(doc["RightHandGrab"].GetObject());
@@ -234,11 +242,6 @@ void ATouchAnimateActor::UpdateHand(Document &doc)
 		Grab(false);
 	if (d["RightRelease"].GetBool())
 		Release(false);
-
-	// Right hand pose
-	d = ParsedDoc(doc["RightHandPose"].GetObject());
-	AnimInstance->RightHandWorldPos = VectorMaker(d["RightHandWorldPos"].GetObject());
-	AnimInstance->RightHandWorldRot = RotatorMaker(d["RightHandWorldRot"].GetObject());
 
 
 }

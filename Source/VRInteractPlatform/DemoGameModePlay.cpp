@@ -65,6 +65,12 @@ void ADemoGameModePlay::BeginPlay()
 	GetWorldTimerManager().SetTimer(ReceiverHandler, this, &ADemoGameModePlay::UpdateAnim, UpdateInterval, true);
 }
 
+void ADemoGameModePlay::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	// UpdateAnim();
+}
+
 void ADemoGameModePlay::TriggerPause()
 {
 	IsPause = !IsPause;
@@ -76,14 +82,16 @@ void ADemoGameModePlay::UpdateAnim()
 	if (IsPause)
 		return;
 
-	if (RecordApplied1 < ApplyPoseArray1.Num())
+	if (RecordApplied1 < ApplyPoseArray1.Num() && HumanPawn1 != NULL)
 	{
-		FString HumanRecord1 = ApplyPoseArray1[RecordApplied1];
+		FString HumanRecord1;
+
+		HumanRecord1 = ApplyPoseArray1[RecordApplied1];
 		HumanPawn1->UpdateAnim(HumanRecord1);
 		RecordApplied1++;
 	}
 
-	if (RecordApplied2 < ApplyPoseArray2.Num())
+	if (RecordApplied2 < ApplyPoseArray2.Num() && HumanPawn2 != NULL)
 	{
 		FString HumanRecord2 = ApplyPoseArray2[RecordApplied2];
 		HumanPawn2->UpdateAnim(HumanRecord2);

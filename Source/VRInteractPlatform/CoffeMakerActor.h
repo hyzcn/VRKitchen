@@ -54,6 +54,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "CoffeeMaker")
 		float PourTime;
 
+	UPROPERTY(EditAnywhere, Category = "CoffeeMaker")
+		float BrewTime;
+
 	UPROPERTY(EditAnywhere, Category = "PourContainer")
 		float NozzleSize;
 
@@ -76,9 +79,15 @@ public:
 		return bIsPouringCoffee;
 	}
 
+	UFUNCTION(BlueprintCallable, Category = "CoffeeMaker")
+	FORCEINLINE bool GetIsBrewing() const {
+		return bIsBrewing;
+	}
+
 private:
 	bool bIsOn;
 	bool bIsPouringCoffee;
+	bool bIsBrewing;
 	float LightTimer;
 	float CoffeeTimer;
 	

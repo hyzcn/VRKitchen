@@ -23,3 +23,4 @@ public class VRInteractPlatformTarget : TargetRules
 		OutExtraModuleNames.AddRange( new string[] { "VRInteractPlatform" } );
 	}
 }
+
