@@ -1,6 +1,6 @@
 VCLA VRKitchen Platform 
 
-Requirement: Unreal 4.13 in Windows 10/Ubuntu 16.04, Oculus Rift and Touch, (ROS, Baxter simulator)
+Requirement: Unreal 4.17 in Windows 10/Ubuntu 16.04, Oculus Rift and Touch, (ROS, Baxter simulator)
 
 Usage in Linux:
 
