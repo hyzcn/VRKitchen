@@ -211,10 +211,14 @@ void AIKPawn::Grab(bool IsLeft)
 		for (auto& Hit : OutResults)
 		{
 				UPrimitiveComponent* Comp = Hit.GetComponent();
-				Comp->SetSimulatePhysics(false);
+				if (Comp->Mobility == EComponentMobility::Movable)
+				{
+					Comp->SetSimulatePhysics(false);
+					Comp->AttachToComponent(SkeletalMesh, GrabRules, LeftHandAttachPoint);
+					if (!LeftHandGrabbedComponents.Contains(Comp))
+						LeftHandGrabbedComponents.Add(Comp);
+				}
 
-				Comp->AttachToComponent(SkeletalMesh, GrabRules, LeftHandAttachPoint);
-				LeftHandGrabbedComponents.Add(Comp);
 		}
 	}
 	else
@@ -222,11 +226,14 @@ void AIKPawn::Grab(bool IsLeft)
 		for (auto& Hit : OutResults)
 		{
 
-				UPrimitiveComponent* Comp = Hit.GetComponent();
+			UPrimitiveComponent* Comp = Hit.GetComponent();
+			if (Comp->Mobility == EComponentMobility::Movable)
+			{
 				Comp->SetSimulatePhysics(false);
-
 				Comp->AttachToComponent(SkeletalMesh, GrabRules, RightHandAttachPoint);
-				RightHandGrabbedComponents.Add(Comp);
+				if (!RightHandGrabbedComponents.Contains(Comp))
+					RightHandGrabbedComponents.Add(Comp);
+			}
 		}
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("Grabbing"));
@@ -321,9 +328,15 @@ void AIKPawn::AnimRecord(FString &PoseData)
 		Value OJLeftHand(kObjectType);
 		OJLeftHand.AddMember("LeftHandWorldPos", VectorMaker(MyInstance->LeftHandWorldPos, doc), doc.GetAllocator());
 		OJLeftHand.AddMember("LeftHandWorldRot", RotatorMaker(MyInstance->LeftHandWorldRot, doc), doc.GetAllocator());
-		Value OJLeftGrab(kObjectType);
-		OJLeftGrab.AddMember("LeftGrab", LeftGrab, doc.GetAllocator());
-		OJLeftGrab.AddMember("LeftRelease", LeftRelease, doc.GetAllocator());
+		Value OJLeftGrab(kArrayType);
+		OJLeftGrab.Clear();
+		for (auto& comp : LeftHandGrabbedComponents)
+		{
+			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+			Value CompName(temp.c_str(), doc.GetAllocator());
+			OJLeftGrab.PushBack(CompName, doc.GetAllocator());
+		}
+
 		OJ.AddMember("LeftHandPose", OJLeftHand, doc.GetAllocator());
 		OJ.AddMember("LeftHandGrab", OJLeftGrab, doc.GetAllocator());
 
@@ -332,9 +345,14 @@ void AIKPawn::AnimRecord(FString &PoseData)
 		Value OJRightHand(kObjectType);
 		OJRightHand.AddMember("RightHandWorldPos", VectorMaker(MyInstance->RightHandWorldPos, doc), doc.GetAllocator());
 		OJRightHand.AddMember("RightHandWorldRot", RotatorMaker(MyInstance->RightHandWorldRot, doc), doc.GetAllocator());
-		Value OJRightGrab(kObjectType);
-		OJRightGrab.AddMember("RightGrab", RightGrab, doc.GetAllocator());
-		OJRightGrab.AddMember("RightRelease", RightRelease, doc.GetAllocator());
+		Value OJRightGrab(kArrayType);
+		OJRightGrab.Clear();
+		for (auto& comp : RightHandGrabbedComponents)
+		{
+			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+			Value CompName(temp.c_str(), doc.GetAllocator());
+			OJRightGrab.PushBack(CompName, doc.GetAllocator());
+		}
 		OJ.AddMember("RightHandPose", OJRightHand, doc.GetAllocator());
 		OJ.AddMember("RightHandGrab", OJRightGrab, doc.GetAllocator());
 	}

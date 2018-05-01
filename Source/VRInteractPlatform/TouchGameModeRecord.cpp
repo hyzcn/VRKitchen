@@ -128,8 +128,10 @@ void ATouchGameModeRecord::RecordActors()
 		if (HumanPawn)
 			HumanPawn->UpdateAnim(PoseData);
 
+		/*
 		if (BaxterRobot)
 			BaxterRobot->AnimateRecord(PoseData);
+		*/
 
 		RecordObjData(ObjData);
 	}
@@ -144,6 +146,8 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 	Value StoveData(kObjectType);
 	Value CofMakerData(kObjectType);
 	Value CupData(kObjectType);
+	Value PlateData(kObjectType);
+	Value KnifeData(kObjectType);
 
 	if (Carrot && CarrotMesh)
 	{
@@ -160,12 +164,20 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 	if (CabinetDoor)
 	{
 		CabinetData.AddMember("Open", CabinetDoor->on, doc.GetAllocator());
+		Value CabPose(kObjectType);
+		CabPose.AddMember("Loc", VectorMaker(CabinetDoor->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
+		CabPose.AddMember("Rot", RotatorMaker(CabinetDoor->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
+		CabinetData.AddMember("Pose", CabPose, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Cabinet", CabinetData, doc.GetAllocator());
 
 	if (Stove)
 	{
 		StoveData.AddMember("On", Stove->on, doc.GetAllocator());
+		Value StovePose(kObjectType);
+		StovePose.AddMember("Loc", VectorMaker(Stove->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
+		StovePose.AddMember("Rot", RotatorMaker(Stove->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
+		StoveData.AddMember("Pose", StovePose, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Stove", StoveData, doc.GetAllocator());
 
@@ -174,15 +186,40 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 		CofMakerData.AddMember("Power", CofMaker->GetPowerStatus(), doc.GetAllocator());
 		CofMakerData.AddMember("IsPouring", CofMaker->GetIsPouringCoffee(), doc.GetAllocator());
 		CofMakerData.AddMember("IsBrewing", CofMaker->GetIsBrewing(), doc.GetAllocator());
+		Value CofMakerPose(kObjectType);
+		CofMakerPose.AddMember("Loc", VectorMaker(CofMaker->CoffeeMakerMesh->GetComponentLocation(), doc), doc.GetAllocator());
+		CofMakerPose.AddMember("Rot", RotatorMaker(CofMaker->CoffeeMakerMesh->GetComponentRotation(), doc), doc.GetAllocator());
+		CofMakerData.AddMember("Pose", CofMakerPose, doc.GetAllocator());
 	}
 	ObjectData.AddMember("CoffeeMaker", CofMakerData, doc.GetAllocator());
 
 	if (Cup)
 	{
 		CupData.AddMember("FillFraction", Cup->CurrentFillFraction, doc.GetAllocator());
+		Value CupPose(kObjectType);
+		CupPose.AddMember("Loc", VectorMaker(Cup->ContainerMesh->GetComponentLocation(), doc), doc.GetAllocator());
+		CupPose.AddMember("Rot", RotatorMaker(Cup->ContainerMesh->GetComponentRotation(), doc), doc.GetAllocator());
+		CupData.AddMember("Pose", CupPose, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Cup", CupData, doc.GetAllocator());
 
+	if (Knife)
+	{
+		Value KnifePose(kObjectType);
+		KnifePose.AddMember("Loc", VectorMaker(Knife->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
+		KnifePose.AddMember("Rot", RotatorMaker(Knife->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
+		KnifeData.AddMember("Pose", KnifePose, doc.GetAllocator());
+	}
+	ObjectData.AddMember("Knife", KnifeData, doc.GetAllocator());
+
+	if (Plate)
+	{
+		Value PlatePose(kObjectType);
+		PlatePose.AddMember("Loc", VectorMaker(Plate->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
+		PlatePose.AddMember("Rot", RotatorMaker(Plate->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
+		PlateData.AddMember("Pose", PlatePose, doc.GetAllocator());
+	}
+	ObjectData.AddMember("Plate", PlateData, doc.GetAllocator());
 
 	StringBuffer buffer;
 	Writer<StringBuffer> writer(buffer);

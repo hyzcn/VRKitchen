@@ -35,7 +35,7 @@ ACoffeMakerActor::ACoffeMakerActor()
 	LightTimer = 0;
 	CoffeeTimer = 0;
 	PourTime = 5;
-	BrewTime = 40;
+	BrewTime = 5;
 }
 
 // Called when the game starts or when spawned
