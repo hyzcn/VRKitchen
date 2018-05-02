@@ -328,33 +328,42 @@ void AIKPawn::AnimRecord(FString &PoseData)
 		Value OJLeftHand(kObjectType);
 		OJLeftHand.AddMember("LeftHandWorldPos", VectorMaker(MyInstance->LeftHandWorldPos, doc), doc.GetAllocator());
 		OJLeftHand.AddMember("LeftHandWorldRot", RotatorMaker(MyInstance->LeftHandWorldRot, doc), doc.GetAllocator());
-		Value OJLeftGrab(kArrayType);
-		OJLeftGrab.Clear();
+		Value OJLeftGrabObj(kArrayType);
+		OJLeftGrabObj.Clear();
 		for (auto& comp : LeftHandGrabbedComponents)
 		{
 			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
 			Value CompName(temp.c_str(), doc.GetAllocator());
-			OJLeftGrab.PushBack(CompName, doc.GetAllocator());
+			OJLeftGrabObj.PushBack(CompName, doc.GetAllocator());
 		}
+		Value OJLeftGrab(kObjectType);
+		OJLeftGrab.AddMember("LeftGrab", LeftGrab, doc.GetAllocator());
+		OJLeftGrab.AddMember("LeftRelease", LeftRelease, doc.GetAllocator());
 
-		OJ.AddMember("LeftHandPose", OJLeftHand, doc.GetAllocator());
 		OJ.AddMember("LeftHandGrab", OJLeftGrab, doc.GetAllocator());
+		OJ.AddMember("LeftHandPose", OJLeftHand, doc.GetAllocator());
+		OJ.AddMember("LeftHandGrabObj", OJLeftGrabObj, doc.GetAllocator());
 
 
 		// Right Hand Pose
 		Value OJRightHand(kObjectType);
 		OJRightHand.AddMember("RightHandWorldPos", VectorMaker(MyInstance->RightHandWorldPos, doc), doc.GetAllocator());
 		OJRightHand.AddMember("RightHandWorldRot", RotatorMaker(MyInstance->RightHandWorldRot, doc), doc.GetAllocator());
-		Value OJRightGrab(kArrayType);
-		OJRightGrab.Clear();
+		Value OJRightGrabObj(kArrayType);
+		OJRightGrabObj.Clear();
 		for (auto& comp : RightHandGrabbedComponents)
 		{
 			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
 			Value CompName(temp.c_str(), doc.GetAllocator());
-			OJRightGrab.PushBack(CompName, doc.GetAllocator());
+			OJRightGrabObj.PushBack(CompName, doc.GetAllocator());
 		}
-		OJ.AddMember("RightHandPose", OJRightHand, doc.GetAllocator());
+		Value OJRightGrab(kObjectType);
+		OJRightGrab.AddMember("RightGrab", RightGrab, doc.GetAllocator());
+		OJRightGrab.AddMember("RightRelease", RightRelease, doc.GetAllocator());
+
 		OJ.AddMember("RightHandGrab", OJRightGrab, doc.GetAllocator());
+		OJ.AddMember("RightHandPose", OJRightHand, doc.GetAllocator());
+		OJ.AddMember("RightHandGrabObj", OJRightGrabObj, doc.GetAllocator());
 	}
 
 	StringBuffer buffer;

@@ -12,6 +12,7 @@ void ATouchGameModePlay::BeginPlay()
 	FString FileName = GameDir + "HumanBaxterPoseRecord.csv";
 	IsPause = false;
 	RecordSegment = true;
+	UpdateBaxter = false;
 
 	if (FPaths::FileExists(FileName))
 	{
@@ -64,14 +65,16 @@ void ATouchGameModePlay::UpdateAnim()
 		RecordApplied++;
 		// UE_LOG(LogTemp, Warning, TEXT("Applied record: %d"), RecordApplied);
 	}
-	// update robot action
-	if (RecordApplied < ApplyPoseArray.Num())
-	{
-		FString BaxterRecord = ApplyPoseArray[RecordApplied];
-		BaxterRobot->UpdateAnim(BaxterRecord);
-		RecordApplied++;
-		// UE_LOG(LogTemp, Warning, TEXT("Applied record: %d"), RecordApplied);
-	}
+
+	if (UpdateBaxter)
+		// update robot action
+		if (RecordApplied < ApplyPoseArray.Num())
+		{
+			FString BaxterRecord = ApplyPoseArray[RecordApplied];
+			BaxterRobot->UpdateAnim(BaxterRecord);
+			RecordApplied++;
+			// UE_LOG(LogTemp, Warning, TEXT("Applied record: %d"), RecordApplied);
+		}
 }
 
 void ATouchGameModePlay::SegmentRecord()

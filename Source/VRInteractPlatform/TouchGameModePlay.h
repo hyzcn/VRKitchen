@@ -38,6 +38,7 @@ private:
 	float UpdateInterval;
 	TArray<FString> ApplyPoseArray;
 	FString SegmentPoints;
+	bool UpdateBaxter;
 	bool IsPause;
 	bool RecordSegment;
 };
