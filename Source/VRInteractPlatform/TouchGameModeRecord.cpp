@@ -233,6 +233,7 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 		Value PanContainedObj(kArrayType);
 		for (auto& comp : Pan->ContainedObjects)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("not empty"));
 			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
 			Value CompName(temp.c_str(), doc.GetAllocator());
 			PanContainedObj.PushBack(CompName, doc.GetAllocator());
