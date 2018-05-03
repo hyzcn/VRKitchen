@@ -16,6 +16,7 @@
 #include "PickCookCutObject.h"
 #include "CoffeMakerActor.h"
 #include "PourContainer.h"
+#include "ObjectContainer.h"
 #include "TouchGameModeRecord.generated.h"
 
 /**
@@ -52,6 +53,7 @@ private:
 	AStaticMeshActor* Knife;
 	ACoffeMakerActor* CofMaker;
 	APourContainer* Cup;
+	AObjectContainer* Pan;
 	float RecordInterval;
 	void RecordObjData(FString &Pose);
 };

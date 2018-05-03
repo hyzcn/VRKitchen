@@ -97,7 +97,8 @@ void ATouchGameModeRecord::BeginPlay()
 			Knife = *ActorItr;
 	}
 
-
+	for (TObjectIterator<AObjectContainer> ActorItr; ActorItr; ++ActorItr)
+		Pan = *ActorItr;
 
 	if (HumanPawn == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("Can't find human pawn"));
@@ -148,6 +149,7 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 	Value CupData(kObjectType);
 	Value PlateData(kObjectType);
 	Value KnifeData(kObjectType);
+	Value PanData(kObjectType);
 
 	if (Carrot && CarrotMesh)
 	{
@@ -220,6 +222,24 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 		PlateData.AddMember("Pose", PlatePose, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Plate", PlateData, doc.GetAllocator());
+
+	if (Pan)
+	{
+		Value PanPose(kObjectType);
+		PanPose.AddMember("Loc", VectorMaker(Pan->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
+		PanPose.AddMember("Rot", RotatorMaker(Pan->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
+		PanData.AddMember("Pose", PanPose, doc.GetAllocator());
+
+		Value PanContainedObj(kArrayType);
+		for (auto& comp : Pan->ContainedObjects)
+		{
+			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+			Value CompName(temp.c_str(), doc.GetAllocator());
+			PanContainedObj.PushBack(CompName, doc.GetAllocator());
+		}
+		PanData.AddMember("ContainedObj", PanContainedObj, doc.GetAllocator());
+	}
+	ObjectData.AddMember("Pan", PanData, doc.GetAllocator());
 
 	StringBuffer buffer;
 	Writer<StringBuffer> writer(buffer);
