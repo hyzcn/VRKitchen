@@ -54,6 +54,7 @@ private:
 	ACoffeMakerActor* CofMaker;
 	APourContainer* Cup;
 	AObjectContainer* Pan;
+	AObjectContainer* Cabinet;
 	float RecordInterval;
 	void RecordObjData(FString &Pose);
 };

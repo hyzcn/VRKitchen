@@ -115,7 +115,7 @@ void ATouchAnimateActor::Grab(bool IsLeft)
 	// DrawDebugSphere(TheWorld, HandLocation, 5.f, 8, FColor(255, 0, 0), true);
 	// UE_LOG(LogTemp, Warning, TEXT("hand location %s"), *HandLocation.ToString());
 	TArray<FHitResult> OutResults;
-	FCollisionShape GrabSphere = FCollisionShape::MakeSphere(5.f);
+	FCollisionShape GrabSphere = FCollisionShape::MakeSphere(3.f);
 	FCollisionObjectQueryParams ObjectParams;
 	FCollisionQueryParams CollisionParams;
 	ObjectParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);

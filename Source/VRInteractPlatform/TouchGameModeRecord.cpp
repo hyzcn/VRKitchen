@@ -28,8 +28,6 @@ static Value RotatorMaker(FRotator rot, Document &doc)
 ATouchGameModeRecord::ATouchGameModeRecord()
 {
 	// DefaultPawnClass = AIKPawn::StaticClass();
-	PoseData = "";
-	ObjData = "";
 	PoseRecord = true;
 	RecordInterval = 0.01;
 }
@@ -38,7 +36,8 @@ void ATouchGameModeRecord::BeginPlay()
 {
 	Super::BeginPlay();
 	UWorld* World = GetWorld();
-
+	PoseData = "";
+	ObjData = "";
 	PrimaryActorTick.bCanEverTick = true;
 
 	if (PoseRecord)
@@ -98,7 +97,13 @@ void ATouchGameModeRecord::BeginPlay()
 	}
 
 	for (TObjectIterator<AObjectContainer> ActorItr; ActorItr; ++ActorItr)
-		Pan = *ActorItr;
+	{
+		if (ActorItr->GetName() == TEXT("Pan"))
+			Pan = *ActorItr;
+		if (ActorItr->GetName() == TEXT("Cabinet"))
+			Cabinet = *ActorItr;
+	}
+		
 
 	if (HumanPawn == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("Can't find human pawn"));
@@ -143,13 +148,13 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 {
 	Value ObjectData(kObjectType);
 	Value CarrotData(kObjectType);
-	Value CabinetData(kObjectType);
 	Value StoveData(kObjectType);
 	Value CofMakerData(kObjectType);
 	Value CupData(kObjectType);
 	Value PlateData(kObjectType);
 	Value KnifeData(kObjectType);
 	Value PanData(kObjectType);
+	Value CabinetData(kObjectType);
 
 	if (Carrot && CarrotMesh)
 	{
@@ -166,10 +171,23 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 	if (CabinetDoor)
 	{
 		CabinetData.AddMember("Open", CabinetDoor->on, doc.GetAllocator());
+	}
+
+	if (Cabinet)
+	{
 		Value CabPose(kObjectType);
-		CabPose.AddMember("Loc", VectorMaker(CabinetDoor->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
-		CabPose.AddMember("Rot", RotatorMaker(CabinetDoor->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
+		CabPose.AddMember("Loc", VectorMaker(Cabinet->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
+		CabPose.AddMember("Rot", RotatorMaker(Cabinet->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
 		CabinetData.AddMember("Pose", CabPose, doc.GetAllocator());
+		
+		Value CabinContainedObj(kArrayType);
+		for (auto& comp : Cabinet->ContainedObjects)
+		{
+			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+			Value CompName(temp.c_str(), doc.GetAllocator());
+			CabinContainedObj.PushBack(CompName, doc.GetAllocator());
+		}
+		CabinetData.AddMember("ContainedObj", CabinContainedObj, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Cabinet", CabinetData, doc.GetAllocator());
 
@@ -233,7 +251,7 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 		Value PanContainedObj(kArrayType);
 		for (auto& comp : Pan->ContainedObjects)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("not empty"));
+			// UE_LOG(LogTemp, Warning, TEXT("not empty"));
 			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
 			Value CompName(temp.c_str(), doc.GetAllocator());
 			PanContainedObj.PushBack(CompName, doc.GetAllocator());
