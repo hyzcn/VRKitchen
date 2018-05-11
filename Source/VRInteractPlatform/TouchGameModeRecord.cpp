@@ -83,14 +83,12 @@ void ATouchGameModeRecord::BeginPlay()
 		if (ActorItr->GetName() == TEXT("Stove"))
 			Stove = *ActorItr;
 
-		if (ActorItr->GetName() == TEXT("Cabinet_leftdoor"))
+		if (ActorItr->GetName() == TEXT("CabinetLeftDoor"))
 			CabinetDoor = *ActorItr;
 	}
 
 	for (TObjectIterator<AStaticMeshActor> ActorItr; ActorItr; ++ActorItr)
 	{
-		if (ActorItr->GetName() == TEXT("Plate"))
-			Plate = *ActorItr;
 
 		if (ActorItr->GetName() == TEXT("Knife"))
 			Knife = *ActorItr;
@@ -100,8 +98,12 @@ void ATouchGameModeRecord::BeginPlay()
 	{
 		if (ActorItr->GetName() == TEXT("Pan"))
 			Pan = *ActorItr;
+
 		if (ActorItr->GetName() == TEXT("Cabinet"))
 			Cabinet = *ActorItr;
+
+		if (ActorItr->GetName() == TEXT("Plate"))
+			Plate = *ActorItr;
 	}
 		
 
@@ -238,6 +240,15 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 		PlatePose.AddMember("Loc", VectorMaker(Plate->GetStaticMeshComponent()->GetComponentLocation(), doc), doc.GetAllocator());
 		PlatePose.AddMember("Rot", RotatorMaker(Plate->GetStaticMeshComponent()->GetComponentRotation(), doc), doc.GetAllocator());
 		PlateData.AddMember("Pose", PlatePose, doc.GetAllocator());
+
+		Value PlateContainedObj(kArrayType);
+		for (auto& comp : Plate->ContainedObjects)
+		{
+			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+			Value CompName(temp.c_str(), doc.GetAllocator());
+			PlateContainedObj.PushBack(CompName, doc.GetAllocator());
+		}
+		PlateData.AddMember("ContainedObj", PlateContainedObj, doc.GetAllocator());
 	}
 	ObjectData.AddMember("Plate", PlateData, doc.GetAllocator());
 

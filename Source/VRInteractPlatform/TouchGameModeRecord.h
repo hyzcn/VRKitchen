@@ -49,12 +49,12 @@ private:
 	UProceduralMeshComponent* CarrotMesh;
 	AOnOffObject* Stove;
 	AOnOffObject* CabinetDoor;
-	AStaticMeshActor* Plate;
 	AStaticMeshActor* Knife;
 	ACoffeMakerActor* CofMaker;
 	APourContainer* Cup;
 	AObjectContainer* Pan;
 	AObjectContainer* Cabinet;
+	AObjectContainer* Plate;
 	float RecordInterval;
 	void RecordObjData(FString &Pose);
 };
