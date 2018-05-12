@@ -8,7 +8,7 @@ ADemoGameModeRecord::ADemoGameModeRecord()
 {
 	// DefaultPawnClass = AIKPawn::StaticClass();
 	PoseData = "";
-	PoseRecord = true;
+	PoseRecord = false;
 	RecordInterval = 0.01;
 }
 
@@ -51,12 +51,8 @@ void ADemoGameModeRecord::Tick(float DeltaSeconds)
 
 void ADemoGameModeRecord::RecordActors()
 {
-	if (PoseRecord)
-	{
-		if (HumanPawn)
-			HumanPawn->UpdateAnim(PoseData);
-	}
-
+	if (HumanPawn)
+		HumanPawn->UpdateAnim(PoseData);
 
 }
 

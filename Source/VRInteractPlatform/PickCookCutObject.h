@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Materials/Material.h"
+#include "ProceduralMeshComponent.h"
 #include "PickCookCutObject.generated.h"
 
 UCLASS()
@@ -35,5 +36,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		UMaterial* SourceMat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		TArray<UProceduralMeshComponent*> ProcMeshes;
 	
 };

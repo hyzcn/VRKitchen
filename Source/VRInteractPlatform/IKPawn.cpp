@@ -155,34 +155,40 @@ void AIKPawn::UpdateAnim(FString &PoseData)
 void AIKPawn::UpdateMoveAnim()
 {
 	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
-	
-	FRotator NewRotation = GetActorRotation();
-	NewRotation.Yaw += TurnSpeed * RotationInput * UpdateInterval; //DeltaTime
-	SetActorRotation(NewRotation);
-	FVector DisplacementVector = FVector(0, 0, 0);
-	DisplacementVector = GetActorForwardVector() * MovementInput.X + GetActorRightVector() * MovementInput.Y;
-	DisplacementVector = DisplacementVector.GetSafeNormal();
-	DisplacementVector = MovementSpeed * DisplacementVector * UpdateInterval; //DeltaTime;
-	FVector NewLocation = GetActorLocation() + DisplacementVector;
-	SetActorLocation(NewLocation);
+	if (MyInstance != NULL)
+	{
+		FRotator NewRotation = GetActorRotation();
+		NewRotation.Yaw += TurnSpeed * RotationInput * UpdateInterval; //DeltaTime
+		SetActorRotation(NewRotation);
+		FVector DisplacementVector = FVector(0, 0, 0);
+		DisplacementVector = GetActorForwardVector() * MovementInput.X + GetActorRightVector() * MovementInput.Y;
+		DisplacementVector = DisplacementVector.GetSafeNormal();
+		DisplacementVector = MovementSpeed * DisplacementVector * UpdateInterval; //DeltaTime;
+		FVector NewLocation = GetActorLocation() + DisplacementVector;
+		SetActorLocation(NewLocation);
 
-	// update movement velocity
-	CurrentSpeed = MovementSpeed * MovementInput.Size();
-	MyInstance->Speed = CurrentSpeed;
+		// update movement velocity
+		CurrentSpeed = MovementSpeed * MovementInput.Size();
+		MyInstance->Speed = CurrentSpeed;
+	}
+	
 }
 
 void AIKPawn::UpdateBodyAnim()
 {
 	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
+	if (MyInstance != NULL)
+	{
+		// update hand animation
+		MyInstance->LeftHandWorldRot = MotionController_L->GetComponentRotation();
+		MyInstance->LeftHandWorldPos = MotionController_L->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_lSocket") - SkeletalMesh->GetSocketLocation("hand_l"));
+		MyInstance->RightHandWorldRot = MotionController_R->GetComponentRotation();
+		MyInstance->RightHandWorldPos = MotionController_R->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_rSocket") - SkeletalMesh->GetSocketLocation("hand_r"));
 
-	// update hand animation
-	MyInstance->LeftHandWorldRot = MotionController_L->GetComponentRotation();
-	MyInstance->LeftHandWorldPos = MotionController_L->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_lSocket")- SkeletalMesh->GetSocketLocation("hand_l"));
-	MyInstance->RightHandWorldRot = MotionController_R->GetComponentRotation();
-	MyInstance->RightHandWorldPos = MotionController_R->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_rSocket") - SkeletalMesh->GetSocketLocation("hand_r"));
-	
-	// update head animation
-	MyInstance->HeadWorldTransform = Camera->GetComponentTransform();
+		// update head animation
+		MyInstance->HeadWorldTransform = Camera->GetComponentTransform();
+	}
+
 
 }
 
