@@ -20,10 +20,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
+		bool Open;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
+		bool HasLid;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
+		float OrigFillFraction;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
+		FString FluidName;
+
 	UPROPERTY(EditDefaultsOnly, Category = "PourContainer")
 		UArrowComponent* UpArrow;
 
-	UPROPERTY(EditDefaultsOnly, Category = "PourContainer")
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "PourContainer")
 		UStaticMeshComponent* ContainerMesh;
 
 	UPROPERTY(EditDefaultsOnly, Category = "PourContainer")

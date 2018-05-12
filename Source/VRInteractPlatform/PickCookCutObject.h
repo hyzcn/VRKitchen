@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Materials/Material.h"
 #include "PickCookCutObject.generated.h"
 
 UCLASS()
@@ -25,5 +26,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		bool cut;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		bool ChangeColor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		UMaterial* CapMat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		UMaterial* SourceMat;
 	
 };

@@ -23,6 +23,9 @@ APourContainer::APourContainer()
 
 	RemainingFluid = 0.05;
 	FlowRate = 0.1;
+	OrigFillFraction = 0.0;
+	HasLid = false;
+	FluidName = TEXT("fluid");
 }
 
 // Called when the game starts or when spawned
@@ -36,7 +39,13 @@ void APourContainer::BeginPlay()
 
 	FluidParticles->SetColorParameter(FName("FluidColor"), FluidColor);
 	FluidParticles->SetFloatParameter(FName("MouthRadius"), MouthRadius);
-	RecieveFluid(FluidColor, 0.5, TEXT("Coffee"));
+	//RecieveFluid(FluidColor, 0.5, TEXT("Coffee"));
+	if (OrigFillFraction > RemainingFluid)
+	{
+		RecieveFluid(FluidColor, OrigFillFraction, FluidName);
+	}
+
+
 }
 
 // Called every frame
@@ -45,7 +54,7 @@ void APourContainer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	MaxFillFraction = FVector::DotProduct(UpArrow->GetForwardVector(), FVector(0, 0, 1)) + RemainingFluid; //Arrow component points in the positive x axis (forward)
 																										   //MaxFillFraction = 1 - FVector::CrossProduct(UpArrow->GetForwardVector(), FVector(0, 0, 1)).Size()*MouthDiameter;
-	if (MaxFillFraction < CurrentFillFraction)
+	if (MaxFillFraction < CurrentFillFraction && Open)
 	{
 		if (CurrentFillFraction > 0)
 		{
@@ -69,7 +78,8 @@ void APourContainer::Tick(float DeltaTime)
 
 void APourContainer::RecieveFluid(FLinearColor NewFluidColor, float FluidAmount, FString FluidKind)
 {
-	FluidColor = (FluidColor * CurrentFillFraction + NewFluidColor * FluidAmount) / (CurrentFillFraction + FluidAmount);
+	// FluidColor = (FluidColor * CurrentFillFraction + NewFluidColor * FluidAmount) / (CurrentFillFraction + FluidAmount);
+	FluidColor = NewFluidColor;
 	UE_LOG(LogTemp, Warning, TEXT("Current fill fraction + Fluid amount: %f + %f"), CurrentFillFraction, FluidAmount);
 	if (CurrentFillFraction < 1.f)
 	{
