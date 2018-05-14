@@ -8,7 +8,7 @@
 #include "PickCookCutObject.generated.h"
 
 UCLASS()
-class VRINTERACTPLATFORM_API APickCookCutObject : public AActor
+class VRINTERACTPLATFORM_API APickCookCutObject : public AStaticMeshActor
 {
 	GENERATED_BODY()
 	
