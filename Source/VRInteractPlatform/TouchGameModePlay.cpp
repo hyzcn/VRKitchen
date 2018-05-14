@@ -9,7 +9,7 @@ void ATouchGameModePlay::BeginPlay()
 	UWorld* World = GetWorld();
 	FString SegmentPoints = "";
 	FString GameDir = FPaths::GameDir();
-	FString FileName = GameDir + "HumanPoseRecord.csv";
+	FString FileName = GameDir + "HumanBaxterPoseRecord.csv";
 	IsPause = false;
 	RecordSegment = true;
 	UpdateBaxter = false;
@@ -63,7 +63,7 @@ void ATouchGameModePlay::UpdateAnim()
 		FString HumanRecord = ApplyPoseArray[RecordApplied];
 		HumanPawn->UpdateAnim(HumanRecord);
 		RecordApplied++;
-		// UE_LOG(LogTemp, Warning, TEXT("Applied record: %d"), RecordApplied);
+		// UE_LOG(LogTemp, Warning, TEXT("Applied record: %s"), RecordApplied);
 	}
 
 	if (UpdateBaxter)

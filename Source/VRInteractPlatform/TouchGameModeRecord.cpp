@@ -63,6 +63,7 @@ void ATouchGameModeRecord::BeginPlay()
 	for (TObjectIterator<AIKPawn> ActorItr; ActorItr; ++ActorItr)
 		HumanPawn = *ActorItr;
 
+	/*
 	for (TObjectIterator<ACoffeMakerActor> ActorItr; ActorItr; ++ActorItr)
 		CofMaker = *ActorItr;
 
@@ -105,7 +106,7 @@ void ATouchGameModeRecord::BeginPlay()
 		if (ActorItr->GetName() == TEXT("Plate"))
 			Plate = *ActorItr;
 	}
-		
+	*/
 
 	if (HumanPawn == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("Can't find human pawn"));
@@ -141,7 +142,7 @@ void ATouchGameModeRecord::RecordActors()
 			BaxterRobot->AnimateRecord(PoseData);
 		*/
 
-		RecordObjData(ObjData);
+		// RecordObjData(ObjData);
 	}
 
 }
