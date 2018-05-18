@@ -5,6 +5,7 @@
 #include "TouchAnimInstance.h"
 #include "Runtime/Engine/Classes/Camera/CameraComponent.h"
 #include "Runtime/HeadMountedDisplay/Public/MotionControllerComponent.h"
+#include "PickCookCutObject.h"
 #include <string>
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -70,6 +71,14 @@ public:
 
 	void ReleaseRight();
 
+	void SqueezeLeft();
+
+	void SqueezeRight();
+
+	void SqueezeReleaseLeft();
+
+	void SqueezeReleaseRight();
+
 	void FireGrabEventsLeft(bool pressed);
 
 	void FireGrabEventsRight(bool pressed);
@@ -86,16 +95,19 @@ public:
 	float TurnSpeed;
 	float CurrentSpeed;
 
+
 protected:
 	float UpdateInterval;
-
 	TArray<UPrimitiveComponent*> LeftHandGrabbedComponents;
 	TArray<UPrimitiveComponent*> RightHandGrabbedComponents;
+
 
 private:
 	bool LeftGrabPress, RightGrabPress;
 	bool LeftGrab, RightGrab, LeftRelease, RightRelease;
 	Document doc;
+	bool LeftSqueeze;
+	bool RightSqueeze;
 	// bool PoseRecord;
 	// FString PoseData;
 

@@ -42,6 +42,8 @@ AIKPawn::AIKPawn()
 	PrimaryActorTick.bCanEverTick = true;
 	LeftGrabPress = false;
 	RightGrabPress = false;
+	LeftSqueeze = false;
+	RightSqueeze = false;
 	LeftHandAttachPoint = FName("hand_lSocket");
 	RightHandAttachPoint = FName("hand_rSocket");
 	
@@ -117,6 +119,11 @@ void AIKPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 	InputComponent->BindAction("GrabLeft", EInputEvent::IE_Released, this, &AIKPawn::ReleaseLeft);
 	InputComponent->BindAction("GrabRight", EInputEvent::IE_Pressed, this, &AIKPawn::GrabRight);
 	InputComponent->BindAction("GrabRight", EInputEvent::IE_Released, this, &AIKPawn::ReleaseRight);
+	InputComponent->BindAction("SqueezeLeft", EInputEvent::IE_Pressed, this, &AIKPawn::SqueezeLeft);
+	InputComponent->BindAction("SqueezeLeft", EInputEvent::IE_Released, this, &AIKPawn::SqueezeReleaseLeft);
+	InputComponent->BindAction("SqueezeRight", EInputEvent::IE_Pressed, this, &AIKPawn::SqueezeRight);
+	InputComponent->BindAction("SqueezeRight", EInputEvent::IE_Released, this, &AIKPawn::SqueezeReleaseRight);
+
 	InputComponent->BindAxis("MoveForward", this, &AIKPawn::ProcessForward);
 	InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
 	InputComponent->BindAxis("Turn", this, &AIKPawn::ProcessRotate);
@@ -223,6 +230,7 @@ void AIKPawn::Grab(bool IsLeft)
 					Comp->AttachToComponent(SkeletalMesh, GrabRules, LeftHandAttachPoint);
 					if (!LeftHandGrabbedComponents.Contains(Comp))
 						LeftHandGrabbedComponents.Add(Comp);
+
 				}
 
 		}
@@ -401,3 +409,22 @@ void AIKPawn::ReleaseRight()
 	RightGrabPress = false;
 }
 
+void AIKPawn::SqueezeLeft()
+{
+	LeftSqueeze = true;
+}
+
+void AIKPawn::SqueezeRight()
+{
+	RightSqueeze = true;
+}
+
+void AIKPawn::SqueezeReleaseLeft()
+{
+	LeftSqueeze = false;
+}
+
+void AIKPawn::SqueezeReleaseRight()
+{
+	RightSqueeze = false;
+}

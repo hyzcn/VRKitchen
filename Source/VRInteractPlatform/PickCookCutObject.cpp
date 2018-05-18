@@ -12,6 +12,7 @@ APickCookCutObject::APickCookCutObject()
 	ChangeColor = false;
 	cook = false;
 	cut = false;
+	CanSqueeze = false;
 }
 
 // Called when the game starts or when spawned

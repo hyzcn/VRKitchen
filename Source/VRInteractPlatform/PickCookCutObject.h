@@ -32,6 +32,12 @@ public:
 		bool ChangeColor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		bool CanSqueeze;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		FLinearColor SqueezeColor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		UMaterial* CapMat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")

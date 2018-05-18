@@ -27,9 +27,6 @@ public:
 		bool HasLid;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
-		float OrigFillFraction;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
 		FString FluidName;
 
 	UPROPERTY(EditDefaultsOnly, Category = "PourContainer")
@@ -47,7 +44,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "PourContainer")
 		float MaxFillFraction;
 
-	UPROPERTY(EditAnywhere, Category = "PourContainer")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
 		float CurrentFillFraction;
 
 	UPROPERTY(EditAnywhere, Category = "PourContainer")

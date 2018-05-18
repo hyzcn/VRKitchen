@@ -23,7 +23,6 @@ APourContainer::APourContainer()
 
 	RemainingFluid = 0.05;
 	FlowRate = 0.1;
-	OrigFillFraction = 0.0;
 	HasLid = false;
 	FluidName = TEXT("fluid");
 }
@@ -32,18 +31,18 @@ APourContainer::APourContainer()
 void APourContainer::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FluidMaterialRef = FillMesh->CreateAndSetMaterialInstanceDynamic(0);
-	FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
-	FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), 0.5);
+	if (FillMesh)
+	{
+		FluidMaterialRef = FillMesh->CreateAndSetMaterialInstanceDynamic(0);
+		FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
+		FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), CurrentFillFraction);
+	}
+	
+	// FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), 0.5);
 
 	FluidParticles->SetColorParameter(FName("FluidColor"), FluidColor);
 	FluidParticles->SetFloatParameter(FName("MouthRadius"), MouthRadius);
 	//RecieveFluid(FluidColor, 0.5, TEXT("Coffee"));
-	if (OrigFillFraction > RemainingFluid)
-	{
-		RecieveFluid(FluidColor, OrigFillFraction, FluidName);
-	}
 
 
 }
@@ -72,7 +71,8 @@ void APourContainer::Tick(float DeltaTime)
 	{
 		FluidParticles->Deactivate();
 	}
-	FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), CurrentFillFraction);
+	if (FluidMaterialRef)
+		FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), CurrentFillFraction);
 	//UE_LOG(LogTemp, Warning, TEXT("MaxFillFraction %f"), MaxFillFraction);
 }
 
@@ -89,7 +89,8 @@ void APourContainer::RecieveFluid(FLinearColor NewFluidColor, float FluidAmount,
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Full!"));
 	}
-	FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
+	if (FluidMaterialRef)
+		FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
 	FluidParticles->SetColorParameter(FName("FluidColor"), FluidColor);
 	ContainedFluids.AddUnique(FluidKind);
 
