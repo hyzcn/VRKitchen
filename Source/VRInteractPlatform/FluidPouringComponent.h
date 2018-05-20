@@ -15,11 +15,15 @@ class VRINTERACTPLATFORM_API UFluidPouringComponent : public UParticleSystemComp
 	
 
 public:
+	UFluidPouringComponent();
 	UFUNCTION(BlueprintCallable, Category = "Pouring")
 		void PourFluid(FLinearColor FluidColor, float PourAmount);
 
 	UPROPERTY(EditAnywhere, Category = "Pouring")
 		FString FluidKind;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pouring")
+		float QueryRange;
 	
 	
 };

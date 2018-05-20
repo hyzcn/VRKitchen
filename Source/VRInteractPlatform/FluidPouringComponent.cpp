@@ -6,13 +6,17 @@
 
 #define POUR_TRACE ECollisionChannel::ECC_GameTraceChannel1
 
+UFluidPouringComponent::UFluidPouringComponent()
+{
+	QueryRange = 1.f;
+}
 
 void UFluidPouringComponent::PourFluid(FLinearColor FluidColor, float PourAmount)
 {
 	UWorld* TheWorld = this->GetWorld();
 
 	TArray<FHitResult> OutResults;
-	FCollisionShape GrabSphere = FCollisionShape::MakeSphere(1.f);
+	FCollisionShape GrabSphere = FCollisionShape::MakeSphere(QueryRange);
 	FCollisionObjectQueryParams ObjectParams;
 	FCollisionQueryParams CollisionParams;
 	ObjectParams.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
@@ -40,8 +44,8 @@ void UFluidPouringComponent::PourFluid(FLinearColor FluidColor, float PourAmount
 			break;
 		}
 
-		//UE_LOG(LogTemp, Warning, TEXT("Pouring num %d : %s"), i, *AActor::GetDebugName(OutResults[i].GetActor()));
-		//UE_LOG(LogTemp, Warning, TEXT("Pouring num %d : %s"), i, *OutResults[i].GetComponent()->GetReadableName());
+		UE_LOG(LogTemp, Warning, TEXT("Pouring num %d : %s"), i, *AActor::GetDebugName(OutResults[i].GetActor()));
+		UE_LOG(LogTemp, Warning, TEXT("Pouring num %d : %s"), i, *OutResults[i].GetComponent()->GetReadableName());
 	}
 }
 
