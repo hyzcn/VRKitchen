@@ -24,6 +24,7 @@ APourContainer::APourContainer()
 	RemainingFluid = 0.05;
 	FlowRate = 0.1;
 	HasLid = false;
+	CanReceiveFluid = true;
 	FluidName = TEXT("fluid");
 }
 
@@ -79,6 +80,8 @@ void APourContainer::Tick(float DeltaTime)
 void APourContainer::RecieveFluid(FLinearColor NewFluidColor, float FluidAmount, FString FluidKind)
 {
 	// FluidColor = (FluidColor * CurrentFillFraction + NewFluidColor * FluidAmount) / (CurrentFillFraction + FluidAmount);
+	if (!CanReceiveFluid)
+		return;
 	FluidColor = NewFluidColor;
 	UE_LOG(LogTemp, Warning, TEXT("Current fill fraction + Fluid amount: %f + %f"), CurrentFillFraction, FluidAmount);
 	if (CurrentFillFraction < 1.f)

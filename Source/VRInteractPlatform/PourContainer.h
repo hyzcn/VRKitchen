@@ -47,6 +47,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
 		float CurrentFillFraction;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
+		bool CanReceiveFluid;
+
 	UPROPERTY(EditAnywhere, Category = "PourContainer")
 		float RemainingFluid;
 
