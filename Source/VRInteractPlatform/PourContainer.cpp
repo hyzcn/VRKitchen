@@ -22,6 +22,7 @@ APourContainer::APourContainer()
 	FluidParticles->Activate();
 
 	RemainingFluid = 0.05;
+	ColorDefault = FLinearColor(1.0, 1.0, 1.0, 0.0);
 	FlowRate = 0.1;
 	HasLid = false;
 	CanReceiveFluid = true;
@@ -64,8 +65,12 @@ void APourContainer::Tick(float DeltaTime)
 		}
 		else
 		{
+			FluidColor = ColorDefault;
+			FluidMaterialRef->SetVectorParameterValue(FName("FluidColor"), FluidColor);
+			FluidParticles->SetColorParameter(FName("FluidColor"), FluidColor);
 			ContainedFluids.Empty();
 			FluidParticles->Deactivate();
+
 		}
 	}
 	else

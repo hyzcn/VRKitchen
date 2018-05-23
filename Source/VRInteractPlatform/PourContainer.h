@@ -62,7 +62,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "PourContainer")
 		bool bIsInfinite;
 
-	UPROPERTY(EditAnywhere, Category = "PourContainer")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
 		FLinearColor FluidColor;
 
 	UFUNCTION(BlueprintCallable, Category = "Pouring")
@@ -77,4 +77,5 @@ public:
 	//	void PourFluid(float PourAmount);
 private:
 	UMaterialInstanceDynamic* FluidMaterialRef;
+	FLinearColor ColorDefault;
 };

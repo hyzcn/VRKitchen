@@ -161,8 +161,8 @@ void ATouchGameModeRecord::RecordObjData(FString &Pose)
 
 	if (Carrot && CarrotMesh)
 	{
-		CarrotData.AddMember("Cut", Carrot->cut, doc.GetAllocator());
-		CarrotData.AddMember("Cook", Carrot->cook, doc.GetAllocator());
+		CarrotData.AddMember("Cut", Carrot->Cut, doc.GetAllocator());
+		CarrotData.AddMember("Cook", Carrot->Cooked, doc.GetAllocator());
 		Value CarrotPose(kObjectType);
 		CarrotPose.AddMember("Loc", VectorMaker(CarrotMesh->GetComponentLocation(), doc), doc.GetAllocator());
 		CarrotPose.AddMember("Rot", RotatorMaker(CarrotMesh->GetComponentRotation(), doc), doc.GetAllocator());

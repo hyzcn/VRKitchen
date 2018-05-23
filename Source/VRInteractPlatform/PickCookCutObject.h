@@ -23,13 +23,13 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
-		bool cook;
+		bool Cooked;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
-		bool cut;
+		bool Cut;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
-		bool ChangeColor;
+		bool CanChangeColor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		bool CanSqueeze;
