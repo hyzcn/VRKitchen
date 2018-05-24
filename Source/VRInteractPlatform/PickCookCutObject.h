@@ -5,6 +5,8 @@
 #include "GameFramework/Actor.h"
 #include "Materials/Material.h"
 #include "ProceduralMeshComponent.h"
+#include "Curves/CurveLinearColor.h"
+#include "Components/TimelineComponent.h"
 #include "PickCookCutObject.generated.h"
 
 UCLASS()
@@ -21,6 +23,8 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
+
+	UTimelineComponent* MyTimeLine;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		bool Cooked;
@@ -44,6 +48,22 @@ public:
 		UMaterial* SourceMat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		UCurveLinearColor* ColorCurve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		bool OnFire;
+
+	UFUNCTION()
+		void TimelineCallback(FLinearColor val);
+
+	UFUNCTION()
+		void TimelineFinishedCallback();
+
+	void PlayTimeline();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		TArray<UProceduralMeshComponent*> ProcMeshes;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		UMaterialInstanceDynamic* DynMaterial;
 };

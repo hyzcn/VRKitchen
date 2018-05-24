@@ -13,12 +13,29 @@ APickCookCutObject::APickCookCutObject()
 	Cooked = false;
 	Cut = false;
 	CanSqueeze = false;
+	OnFire = false;
+	MyTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("MyTimeLine"));
 }
 
 // Called when the game starts or when spawned
 void APickCookCutObject::BeginPlay()
 {
-	Super::BeginPlay();
+	FOnTimelineLinearColor onTimelineCallback;
+	FOnTimelineEventStatic onTimelineFinishedCallback;
+
+		MyTimeLine->SetNetAddressable();
+		MyTimeLine->SetLooping(false);
+		MyTimeLine->SetTimelineLength(10.0f);
+		MyTimeLine->SetPlaybackPosition(0.0f, false);
+		MyTimeLine->SetTimelineLengthMode(ETimelineLengthMode::TL_LastKeyFrame);
+		onTimelineCallback.BindUFunction(this, FName{ TEXT("TimelineCallback") });
+		onTimelineFinishedCallback.BindUFunction(this, FName{ TEXT("TimelineFinishedCallback") });
+		MyTimeLine->AddInterpLinearColor(ColorCurve, onTimelineCallback);
+		MyTimeLine->SetTimelineFinishedFunc(onTimelineFinishedCallback);
+		MyTimeLine->RegisterComponent();
+
+		Super::BeginPlay();
+
 	
 }
 
@@ -26,6 +43,34 @@ void APickCookCutObject::BeginPlay()
 void APickCookCutObject::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+	if (MyTimeLine != NULL)
+	{
+		MyTimeLine->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, NULL);
+	}
+	if (OnFire)
+	{
+		PlayTimeline();
+	}
 
 }
 
+void APickCookCutObject::TimelineCallback(FLinearColor Value)
+{
+	if (DynMaterial != NULL)
+	{
+		DynMaterial->SetVectorParameterValue(FName{ TEXT("Color") }, Value);
+	}
+}
+
+void APickCookCutObject::TimelineFinishedCallback()
+{
+	Cooked = true;
+}
+
+void APickCookCutObject::PlayTimeline()
+{
+	if (MyTimeLine != NULL)
+	{
+		MyTimeLine->Play();
+	}
+}
