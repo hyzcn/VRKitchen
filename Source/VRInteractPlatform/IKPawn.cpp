@@ -161,41 +161,51 @@ void AIKPawn::UpdateAnim(FString &PoseData)
 
 void AIKPawn::UpdateMoveAnim()
 {
-	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
-	if (MyInstance != NULL)
+	if (SkeletalMesh != NULL)
 	{
-		FRotator NewRotation = GetActorRotation();
-		NewRotation.Yaw += TurnSpeed * RotationInput * UpdateInterval; //DeltaTime
-		SetActorRotation(NewRotation);
-		FVector DisplacementVector = FVector(0, 0, 0);
-		DisplacementVector = GetActorForwardVector() * MovementInput.X + GetActorRightVector() * MovementInput.Y;
-		DisplacementVector = DisplacementVector.GetSafeNormal();
-		DisplacementVector = MovementSpeed * DisplacementVector * UpdateInterval; //DeltaTime;
-		FVector NewLocation = GetActorLocation() + DisplacementVector;
-		SetActorLocation(NewLocation);
+		UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
+		if (MyInstance != NULL)
+		{
+			FRotator NewRotation = GetActorRotation();
+			NewRotation.Yaw += TurnSpeed * RotationInput * UpdateInterval; //DeltaTime
+			SetActorRotation(NewRotation);
+			FVector DisplacementVector = FVector(0, 0, 0);
+			DisplacementVector = GetActorForwardVector() * MovementInput.X + GetActorRightVector() * MovementInput.Y;
+			DisplacementVector = DisplacementVector.GetSafeNormal();
+			DisplacementVector = MovementSpeed * DisplacementVector * UpdateInterval; //DeltaTime;
+			FVector NewLocation = GetActorLocation() + DisplacementVector;
+			SetActorLocation(NewLocation);
 
-		// update movement velocity
-		CurrentSpeed = MovementSpeed * MovementInput.Size();
-		MyInstance->Speed = CurrentSpeed;
+			// update movement velocity
+			CurrentSpeed = MovementSpeed * MovementInput.Size();
+			MyInstance->Speed = CurrentSpeed;
+		}
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Fail to find skeletalmesh"));
+	}
+
 	
 }
 
 void AIKPawn::UpdateBodyAnim()
 {
-	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
-	if (MyInstance != NULL)
+	if (SkeletalMesh != NULL)
 	{
-		// update hand animation
-		MyInstance->LeftHandWorldRot = MotionController_L->GetComponentRotation();
-		MyInstance->LeftHandWorldPos = MotionController_L->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_lSocket") - SkeletalMesh->GetSocketLocation("hand_l"));
-		MyInstance->RightHandWorldRot = MotionController_R->GetComponentRotation();
-		MyInstance->RightHandWorldPos = MotionController_R->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_rSocket") - SkeletalMesh->GetSocketLocation("hand_r"));
+		UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
+		if (MyInstance != NULL)
+		{
+			// update hand animation
+			MyInstance->LeftHandWorldRot = MotionController_L->GetComponentRotation();
+			MyInstance->LeftHandWorldPos = MotionController_L->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_lSocket") - SkeletalMesh->GetSocketLocation("hand_l"));
+			MyInstance->RightHandWorldRot = MotionController_R->GetComponentRotation();
+			MyInstance->RightHandWorldPos = MotionController_R->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_rSocket") - SkeletalMesh->GetSocketLocation("hand_r"));
 
-		// update head animation
-		MyInstance->HeadWorldTransform = Camera->GetComponentTransform();
+			// update head animation
+			MyInstance->HeadWorldTransform = Camera->GetComponentTransform();
+		}
 	}
-
 
 }
 
@@ -329,64 +339,68 @@ void AIKPawn::AnimRecord(FString &PoseData)
 	OJActor.AddMember("CurrentSpeed", CurrentSpeed, doc.GetAllocator());
 	OJ.AddMember("ActorPose", OJActor, doc.GetAllocator());
 
-	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
-
-	if (MyInstance)
+	if (SkeletalMesh != NULL)
 	{
-		// Head Pose
-		Value OJHead(kObjectType);
-		OJHead.AddMember("HeadWorldTransform", TransformMaker(MyInstance->HeadWorldTransform, doc), doc.GetAllocator());
-		OJ.AddMember("HeadPose", OJHead, doc.GetAllocator());
+		UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
 
-		// Left Hand Pose
-		Value OJLeftHand(kObjectType);
-		OJLeftHand.AddMember("LeftHandWorldPos", VectorMaker(MyInstance->LeftHandWorldPos, doc), doc.GetAllocator());
-		OJLeftHand.AddMember("LeftHandWorldRot", RotatorMaker(MyInstance->LeftHandWorldRot, doc), doc.GetAllocator());
-		Value OJLeftGrabObj(kArrayType);
-		OJLeftGrabObj.Clear();
-		for (auto& comp : LeftHandGrabbedComponents)
+		if (MyInstance)
 		{
-			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
-			Value CompName(temp.c_str(), doc.GetAllocator());
-			OJLeftGrabObj.PushBack(CompName, doc.GetAllocator());
+			// Head Pose
+			Value OJHead(kObjectType);
+			OJHead.AddMember("HeadWorldTransform", TransformMaker(MyInstance->HeadWorldTransform, doc), doc.GetAllocator());
+			OJ.AddMember("HeadPose", OJHead, doc.GetAllocator());
+
+			// Left Hand Pose
+			Value OJLeftHand(kObjectType);
+			OJLeftHand.AddMember("LeftHandWorldPos", VectorMaker(MyInstance->LeftHandWorldPos, doc), doc.GetAllocator());
+			OJLeftHand.AddMember("LeftHandWorldRot", RotatorMaker(MyInstance->LeftHandWorldRot, doc), doc.GetAllocator());
+			Value OJLeftGrabObj(kArrayType);
+			OJLeftGrabObj.Clear();
+			for (auto& comp : LeftHandGrabbedComponents)
+			{
+				std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+				Value CompName(temp.c_str(), doc.GetAllocator());
+				OJLeftGrabObj.PushBack(CompName, doc.GetAllocator());
+			}
+			Value OJLeftGrab(kObjectType);
+			OJLeftGrab.AddMember("LeftGrab", LeftGrab, doc.GetAllocator());
+			OJLeftGrab.AddMember("LeftRelease", LeftRelease, doc.GetAllocator());
+
+			OJ.AddMember("LeftHandGrab", OJLeftGrab, doc.GetAllocator());
+			OJ.AddMember("LeftHandPose", OJLeftHand, doc.GetAllocator());
+			OJ.AddMember("LeftHandGrabObj", OJLeftGrabObj, doc.GetAllocator());
+
+
+			// Right Hand Pose
+			Value OJRightHand(kObjectType);
+			OJRightHand.AddMember("RightHandWorldPos", VectorMaker(MyInstance->RightHandWorldPos, doc), doc.GetAllocator());
+			OJRightHand.AddMember("RightHandWorldRot", RotatorMaker(MyInstance->RightHandWorldRot, doc), doc.GetAllocator());
+			Value OJRightGrabObj(kArrayType);
+			OJRightGrabObj.Clear();
+			for (auto& comp : RightHandGrabbedComponents)
+			{
+				std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
+				Value CompName(temp.c_str(), doc.GetAllocator());
+				OJRightGrabObj.PushBack(CompName, doc.GetAllocator());
+			}
+			Value OJRightGrab(kObjectType);
+			OJRightGrab.AddMember("RightGrab", RightGrab, doc.GetAllocator());
+			OJRightGrab.AddMember("RightRelease", RightRelease, doc.GetAllocator());
+
+			OJ.AddMember("RightHandGrab", OJRightGrab, doc.GetAllocator());
+			OJ.AddMember("RightHandPose", OJRightHand, doc.GetAllocator());
+			OJ.AddMember("RightHandGrabObj", OJRightGrabObj, doc.GetAllocator());
 		}
-		Value OJLeftGrab(kObjectType);
-		OJLeftGrab.AddMember("LeftGrab", LeftGrab, doc.GetAllocator());
-		OJLeftGrab.AddMember("LeftRelease", LeftRelease, doc.GetAllocator());
 
-		OJ.AddMember("LeftHandGrab", OJLeftGrab, doc.GetAllocator());
-		OJ.AddMember("LeftHandPose", OJLeftHand, doc.GetAllocator());
-		OJ.AddMember("LeftHandGrabObj", OJLeftGrabObj, doc.GetAllocator());
+		StringBuffer buffer;
+		Writer<StringBuffer> writer(buffer);
+		OJ.Accept(writer);
+		std::string str = buffer.GetString();
+		FString data(str.c_str());
 
-
-		// Right Hand Pose
-		Value OJRightHand(kObjectType);
-		OJRightHand.AddMember("RightHandWorldPos", VectorMaker(MyInstance->RightHandWorldPos, doc), doc.GetAllocator());
-		OJRightHand.AddMember("RightHandWorldRot", RotatorMaker(MyInstance->RightHandWorldRot, doc), doc.GetAllocator());
-		Value OJRightGrabObj(kArrayType);
-		OJRightGrabObj.Clear();
-		for (auto& comp : RightHandGrabbedComponents)
-		{
-			std::string temp(TCHAR_TO_UTF8(*(comp->GetOwner()->GetName())));
-			Value CompName(temp.c_str(), doc.GetAllocator());
-			OJRightGrabObj.PushBack(CompName, doc.GetAllocator());
-		}
-		Value OJRightGrab(kObjectType);
-		OJRightGrab.AddMember("RightGrab", RightGrab, doc.GetAllocator());
-		OJRightGrab.AddMember("RightRelease", RightRelease, doc.GetAllocator());
-
-		OJ.AddMember("RightHandGrab", OJRightGrab, doc.GetAllocator());
-		OJ.AddMember("RightHandPose", OJRightHand, doc.GetAllocator());
-		OJ.AddMember("RightHandGrabObj", OJRightGrabObj, doc.GetAllocator());
+		PoseData += data + "\n";
 	}
 
-	StringBuffer buffer;
-	Writer<StringBuffer> writer(buffer);
-	OJ.Accept(writer);
-	std::string str = buffer.GetString();
-	FString data(str.c_str());
-
-	PoseData += data + "\n";
 }
 
 void AIKPawn::GrabLeft()
