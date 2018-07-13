@@ -4,7 +4,7 @@ using UnrealBuildTool;
 
 public class VRInteractPlatform : ModuleRules
 {
-	public VRInteractPlatform(TargetInfo Target)
+	public VRInteractPlatform(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PublicDependencyModuleNames.AddRange(
             new string[] { 

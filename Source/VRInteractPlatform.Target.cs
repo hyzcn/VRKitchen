@@ -5,15 +5,16 @@ using System.Collections.Generic;
 
 public class VRInteractPlatformTarget : TargetRules
 {
-	public VRInteractPlatformTarget(TargetInfo Target)
+	public VRInteractPlatformTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Game;
+		ExtraModuleNames.Add("VRInteractPlatform");
 	}
 
 	//
 	// TargetRules interface.
 	//
-
+	/*
 	public override void SetupBinaries(
 		TargetInfo Target,
 		ref List<UEBuildBinaryConfiguration> OutBuildBinaryConfigurations,
@@ -22,5 +23,6 @@ public class VRInteractPlatformTarget : TargetRules
 	{
 		OutExtraModuleNames.AddRange( new string[] { "VRInteractPlatform" } );
 	}
+	*/
 }
 
