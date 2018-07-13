@@ -203,10 +203,7 @@ void AIKPawn::UpdateBodyAnim()
 			MyInstance->RightHandWorldPos = MotionController_R->GetComponentLocation() - (SkeletalMesh->GetSocketLocation("hand_rSocket") - SkeletalMesh->GetSocketLocation("hand_r"));
 
 			// update head animation
-			//MyInstance->HeadWorldTransform = 
-				
-			FTransform tranTemp = Camera->GetComponentTransform();
-			FVector tslTemp = tranTemp.GetTranslation();
+			MyInstance->HeadWorldTransform = Camera->GetComponentTransform();
 
 		}
 	}
