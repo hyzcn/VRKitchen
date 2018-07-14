@@ -290,11 +290,14 @@ void AIKPawn::Release(bool IsLeft)
 
 void AIKPawn::FireGrabEventsLeft(bool pressed)
 {
+	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
 	if (pressed)
 	{
 		Grab(true);
 		LeftGrab = true;
 		LeftRelease = false;
+		if (MyInstance != NULL)
+			MyInstance->LeftGrabAnim = 1.0;
 	}
 
 	else
@@ -302,17 +305,22 @@ void AIKPawn::FireGrabEventsLeft(bool pressed)
 		Release(true);
 		LeftRelease = true;
 		LeftGrab = false;
+		if (MyInstance != NULL)
+			MyInstance->LeftGrabAnim = 0.0;
 	}
 		
 }
 
 void AIKPawn::FireGrabEventsRight(bool pressed)
 {
+	UTouchAnimInstance* MyInstance = Cast<UTouchAnimInstance>(SkeletalMesh->GetAnimInstance());
 	if (pressed)
 	{
 		Grab(false);
 		RightGrab = true;
 		RightRelease = false;
+		if (MyInstance != NULL)
+			MyInstance->RightGrabAnim = 1.0;
 
 	}
 
@@ -321,6 +329,8 @@ void AIKPawn::FireGrabEventsRight(bool pressed)
 		Release(false);
 		RightRelease = true;
 		RightGrab = false;
+		if (MyInstance != NULL)
+			MyInstance->RightGrabAnim = 0.0;
 	}
 		
 }

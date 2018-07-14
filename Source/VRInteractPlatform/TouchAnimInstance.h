@@ -41,5 +41,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
 		float Direction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
+		float LeftGrabAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Avateering")
+		float RightGrabAnim;
+
 
 };
