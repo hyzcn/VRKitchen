@@ -95,6 +95,8 @@ public:
 	float TurnSpeed;
 	float CurrentSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
+		int ActionToTake;
 
 protected:
 	float UpdateInterval;
@@ -108,6 +110,8 @@ private:
 	Document doc;
 	bool LeftSqueeze;
 	bool RightSqueeze;
+
+	
 	// bool PoseRecord;
 	// FString PoseData;
 

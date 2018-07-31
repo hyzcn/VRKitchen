@@ -63,6 +63,7 @@ AIKPawn::AIKPawn()
 	MovementSpeed = 100;
 	TurnSpeed = 500;
 	UpdateInterval = 0.01;
+	ActionToTake = 0;
 	// PoseRecord = true;
 	// PoseData = "";
 }
@@ -132,6 +133,7 @@ void AIKPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 void AIKPawn::ProcessForward(float AxisValue)
 {
 	if (AxisValue > 0.6 || AxisValue < -0.6)
+	// if (AxisValue > 0.6)
 		MovementInput.X = AxisValue;
 	else
 		MovementInput.X = 0;
