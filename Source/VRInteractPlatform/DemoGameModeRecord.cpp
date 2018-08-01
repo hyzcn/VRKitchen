@@ -22,7 +22,7 @@ void ADemoGameModeRecord::BeginPlay()
 	if (PoseRecord)
 	{
 		GameDir = FPaths::GameDir();
-		FileName = GameDir + "HumanPoseRecord.csv";
+		FileName = GameDir + "HumanPoseRecord2.csv";
 
 		if (FPaths::FileExists(FileName))
 		{

@@ -29,20 +29,9 @@ void ADemoGameModeRecPlay::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("record count: %d"), FieldCount);
 	}
 
-	if (PoseRecord)
-	{
-		GameDir = FPaths::GameDir();
-		FileName = GameDir + "HumanPoseRecord1.csv";
-
-		if (FPaths::FileExists(FileName))
-		{
-			FPlatformFileManager::Get().GetPlatformFile().DeleteFile(*FileName);
-		}
-	}
-
 	for (TObjectIterator<ATouchAnimateActor> ActorItr; ActorItr; ++ActorItr)
 	{
-		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_5"))
+		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_2"))
 		{
 			HumanPawn2 = *ActorItr;
 		}
@@ -72,11 +61,9 @@ void ADemoGameModeRecPlay::Tick(float DeltaSeconds)
 
 void ADemoGameModeRecPlay::RecordActors()
 {
-	if (PoseRecord)
-	{
-		if (HumanPawn1)
-			HumanPawn1->UpdateAnim(PoseData);
-	}
+
+	if (HumanPawn1)
+		HumanPawn1->UpdateAnim(PoseData);
 
 	if (RecordApplied2 < ApplyPoseArray2.Num())
 	{
@@ -90,10 +77,6 @@ void ADemoGameModeRecPlay::RecordActors()
 void ADemoGameModeRecPlay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-	if (PoseRecord)
-	{
-		FFileHelper::SaveStringToFile(PoseData, *FileName, FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get());
-	}
 }
 
 

@@ -113,7 +113,7 @@ void ATouchAnimateActor::Grab(bool IsLeft)
 
 	FVector HandLocation = SkeletalMesh->GetSocketLocation(IsLeft ? LeftHandAttachPoint : RightHandAttachPoint);
 	// DrawDebugSphere(TheWorld, HandLocation, 5.f, 8, FColor(255, 0, 0), true);
-	// UE_LOG(LogTemp, Warning, TEXT("hand location %s"), *HandLocation.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("hand location %s"), *HandLocation.ToString());
 	TArray<FHitResult> OutResults;
 	FCollisionShape GrabSphere = FCollisionShape::MakeSphere(3.f);
 	FCollisionObjectQueryParams ObjectParams;
@@ -131,10 +131,15 @@ void ATouchAnimateActor::Grab(bool IsLeft)
 		for (auto& Hit : OutResults)
 		{
 			UPrimitiveComponent* Comp = Hit.GetComponent();
-			Comp->SetSimulatePhysics(false);
+			if (Comp->Mobility == EComponentMobility::Movable)
+			{
+				Comp->SetSimulatePhysics(false);
+				Comp->AttachToComponent(SkeletalMesh, GrabRules, LeftHandAttachPoint);
+				if (!LeftHandGrabbedComponents.Contains(Comp))
+					LeftHandGrabbedComponents.Add(Comp);
 
-			Comp->AttachToComponent(SkeletalMesh, GrabRules, LeftHandAttachPoint);
-			LeftHandGrabbedComponents.Add(Comp);
+			}
+
 		}
 	}
 	else
@@ -143,10 +148,13 @@ void ATouchAnimateActor::Grab(bool IsLeft)
 		{
 
 			UPrimitiveComponent* Comp = Hit.GetComponent();
-			Comp->SetSimulatePhysics(false);
-
-			Comp->AttachToComponent(SkeletalMesh, GrabRules, RightHandAttachPoint);
-			RightHandGrabbedComponents.Add(Comp);
+			if (Comp->Mobility == EComponentMobility::Movable)
+			{
+				Comp->SetSimulatePhysics(false);
+				Comp->AttachToComponent(SkeletalMesh, GrabRules, RightHandAttachPoint);
+				if (!RightHandGrabbedComponents.Contains(Comp))
+					RightHandGrabbedComponents.Add(Comp);
+			}
 		}
 	}
 	//UE_LOG(LogTemp, Warning, TEXT("Grabbing"));

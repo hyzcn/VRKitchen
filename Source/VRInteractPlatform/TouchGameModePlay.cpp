@@ -9,7 +9,7 @@ void ATouchGameModePlay::BeginPlay()
 	UWorld* World = GetWorld();
 	FString SegmentPoints = "";
 	FString GameDir = FPaths::GameDir();
-	FString FileName = GameDir + "HumanBaxterPoseRecord.csv";
+	FString FileName = GameDir + "HumanPoseRecord2.csv";
 	IsPause = false;
 	RecordSegment = true;
 	UpdateBaxter = false;
