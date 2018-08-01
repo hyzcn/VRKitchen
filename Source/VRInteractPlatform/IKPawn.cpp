@@ -126,7 +126,7 @@ void AIKPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 	InputComponent->BindAction("SqueezeRight", EInputEvent::IE_Released, this, &AIKPawn::SqueezeReleaseRight);
 
 	InputComponent->BindAxis("MoveForward", this, &AIKPawn::ProcessForward);
-	InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
+	// InputComponent->BindAxis("MoveRight", this, &AIKPawn::ProcessRight);
 	InputComponent->BindAxis("Turn", this, &AIKPawn::ProcessRotate);
 }
 
