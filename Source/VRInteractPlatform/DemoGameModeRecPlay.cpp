@@ -27,6 +27,7 @@ void ADemoGameModeRecPlay::BeginPlay()
 	FString FileName5_1 = GameDir + "5_1.txt";
 	FString FileName5_2 = GameDir + "5_2.txt";
 	FString FileName5_3 = GameDir + "5_3.txt";
+	OpenDoorFlag = false;
 
 	if (FPaths::FileExists(FileName1))
 	{
@@ -109,15 +110,6 @@ void ADemoGameModeRecPlay::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("file 5_3 record count: %d"), FieldCount);
 	}
 
-	for (TObjectIterator<ATouchAnimateActor> ActorItr; ActorItr; ++ActorItr)
-	{
-		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_2"))
-		{
-			MachineActor = *ActorItr;
-		}
-
-	}
-
 	RecordApplied1 = 0;
 	RecordApplied2 = 0;
 	RecordApplied3 = 0;
@@ -129,6 +121,24 @@ void ADemoGameModeRecPlay::BeginPlay()
 
 	if (HumanPawn == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("Can't find human pawn"));
+
+	for (TObjectIterator<ATouchAnimateActor> ActorItr; ActorItr; ++ActorItr)
+	{
+		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_2"))
+		{
+			MachineActor = *ActorItr;
+		}
+
+	}
+
+	for (TObjectIterator<AOnOffObject> ActorItr; ActorItr; ++ActorItr)
+	{
+		if (ActorItr->GetName() == TEXT("CabinetLeftDoor"))
+		{
+			LeftDoor = *ActorItr;
+		}
+
+	}
 
 	FTimerHandle ReceiverHandler;
 	GetWorldTimerManager().SetTimer(ReceiverHandler, this, &ADemoGameModeRecPlay::RecordActors, RecordInterval, true);
@@ -201,6 +211,12 @@ void ADemoGameModeRecPlay::RecordActors()
 	}
 	else if (HumanPawn->ActionToTake == 3)
 	{
+		if (OpenDoorFlag == false)
+		{
+			OpenDoorFlag = true;
+			FRotator DoorOpenRot(0,180,0);
+			LeftDoor->GetStaticMeshComponent()->SetRelativeRotation(DoorOpenRot);
+		}
 		if (RecordApplied2 < ApplyPoseArray2.Num())
 		{
 			HumanRecord = ApplyPoseArray2[RecordApplied2];

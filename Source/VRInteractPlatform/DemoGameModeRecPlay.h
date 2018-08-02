@@ -11,6 +11,7 @@
 #include "TouchAnimateActor.h"
 #include "IKPawn.h"
 #include "DocParser.h"
+#include "OnOffObject.h"
 #include "DemoGameModeRecPlay.generated.h"
 
 /**
@@ -35,6 +36,7 @@ public:
 	int32 RecordApplied5;
 
 private:
+	AOnOffObject* LeftDoor;
 	FString HumanRecord;
 	bool PoseRecord;
 	FString PoseData;
@@ -60,6 +62,6 @@ private:
 	TArray<FString> ApplyPoseArray5_1;
 	TArray<FString> ApplyPoseArray5_2;
 	TArray<FString> ApplyPoseArray5_3;
-
+	bool OpenDoorFlag;
 	
 };
