@@ -28,7 +28,7 @@ void ADemoGameModeRecPlay::BeginPlay()
 	FString FileName5_2 = GameDir + "5_2.txt";
 	FString FileName5_3 = GameDir + "5_3.txt";
 	OpenDoorFlag = false;
-	ShowMenu = 0;
+	ShowMenu = -1;
 
 	if (FPaths::FileExists(FileName1))
 	{
@@ -161,8 +161,11 @@ void ADemoGameModeRecPlay::RecordActors()
 		HumanPawn->UpdateAnim(PoseData);
 	*/
 
-
-	if (RecordApplied1 < ApplyPoseArray1.Num())
+	if (HumanPawn->ActionToTake == -1)
+	{
+		ShowMenu = 0;
+	}
+	else if (RecordApplied1 < ApplyPoseArray1.Num())
 	{
 		HumanRecord = ApplyPoseArray1[RecordApplied1];
 		MachineActor->UpdateAnim(HumanRecord);

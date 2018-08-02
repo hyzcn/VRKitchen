@@ -63,7 +63,7 @@ AIKPawn::AIKPawn()
 	MovementSpeed = 100;
 	TurnSpeed = 500;
 	UpdateInterval = 0.01;
-	ActionToTake = 0;
+	ActionToTake = -1;
 	// PoseRecord = true;
 	// PoseData = "";
 }
@@ -72,7 +72,7 @@ AIKPawn::AIKPawn()
 void AIKPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	ShowMenuFlag = false;
+	ShowMenuFlag = true;
 
 	// PoseRecord = false;
 	/*
