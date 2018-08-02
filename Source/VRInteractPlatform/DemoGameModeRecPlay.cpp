@@ -28,6 +28,7 @@ void ADemoGameModeRecPlay::BeginPlay()
 	FString FileName5_2 = GameDir + "5_2.txt";
 	FString FileName5_3 = GameDir + "5_3.txt";
 	OpenDoorFlag = false;
+	ShowMenu = 0;
 
 	if (FPaths::FileExists(FileName1))
 	{
@@ -167,6 +168,11 @@ void ADemoGameModeRecPlay::RecordActors()
 		MachineActor->UpdateAnim(HumanRecord);
 		RecordApplied1++;
 	}
+	else if (ShowMenu == 0)
+	{
+		HumanPawn->ShowMenuFlag = true;
+		ShowMenu = 1;
+	}
 	else if (HumanPawn->ActionToTake == 1)
 	{
 		if (RecordApplied2 < ApplyPoseArray2.Num())
@@ -186,6 +192,11 @@ void ADemoGameModeRecPlay::RecordActors()
 			HumanRecord = ApplyPoseArray4[RecordApplied4];
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied4++;
+		}
+		else if (ShowMenu == 1)
+		{
+			HumanPawn->ShowMenuFlag = true;
+			ShowMenu = 2;
 		}
 	}
 	else if (HumanPawn->ActionToTake == 2)
@@ -207,6 +218,11 @@ void ADemoGameModeRecPlay::RecordActors()
 			HumanRecord = ApplyPoseArray4[RecordApplied4];
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied4++;
+		}
+		else if (ShowMenu == 1)
+		{
+			HumanPawn->ShowMenuFlag = true;
+			ShowMenu = 2;
 		}
 	}
 	else if (HumanPawn->ActionToTake == 3)
@@ -235,7 +251,13 @@ void ADemoGameModeRecPlay::RecordActors()
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied4++;
 		}
+		else if (ShowMenu == 1)
+		{
+			HumanPawn->ShowMenuFlag = true;
+			ShowMenu = 2;
+		}
 	}
+
 	else if (HumanPawn->ActionToTake == 4)
 	{
 		if (RecordApplied5 < ApplyPoseArray5_2.Num())

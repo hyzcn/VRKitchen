@@ -96,6 +96,9 @@ public:
 	float CurrentSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
+		bool ShowMenuFlag;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
 		int ActionToTake;
 
 protected:

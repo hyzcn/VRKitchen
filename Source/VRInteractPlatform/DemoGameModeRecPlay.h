@@ -63,5 +63,6 @@ private:
 	TArray<FString> ApplyPoseArray5_2;
 	TArray<FString> ApplyPoseArray5_3;
 	bool OpenDoorFlag;
+	int ShowMenu;
 	
 };
