@@ -14,11 +14,7 @@ AEvalTest::AEvalTest()
 	OpenFridgeDoorFlag = false;
 	OpenFridgeDoorFlag1 = false;
 	ShowMenu = -1;
-	RecordApplied1 = 0;
-	RecordApplied2 = 0;
-	RecordApplied3 = 0;
-	RecordApplied4 = 0;
-	RecordApplied5 = 0;
+
 }
 
 void AEvalTest::BeginPlay()
@@ -28,16 +24,21 @@ void AEvalTest::BeginPlay()
 	Super::BeginPlay();
 	UWorld* World = GetWorld();
 	FString GameDir = FPaths::GameDir();
-	FString FileName1 = GameDir + "1.txt";
-	FString FileName2 = GameDir + "2.txt";
-	FString FileName3_1 = GameDir + "3_1.txt";
-	FString FileName3_2 = GameDir + "3_2.txt";
-	FString FileName3_3 = GameDir + "3_3.txt";
-	FString FileName4 = GameDir + "4.txt";
-	FString FileName5_1 = GameDir + "5_1.txt";
-	FString FileName5_2 = GameDir + "5_2.txt";
-	FString FileName5_3 = GameDir + "5_3.txt";
+	FString FileName1 = GameDir + "XAI_record/lemon_juice/1.txt";
+	FString FileName2 = GameDir + "XAI_record/lemon_juice/2.txt";
+	FString FileName3_1 = GameDir + "XAI_record/lemon_juice/3_1.txt";
+	FString FileName3_2 = GameDir + "XAI_record/lemon_juice/3_2.txt";
+	FString FileName3_3 = GameDir + "XAI_record/lemon_juice/3_3.txt";
+	FString FileName4 = GameDir + "XAI_record/lemon_juice/4.txt";
+	FString FileName5_1 = GameDir + "XAI_record/lemon_juice/5_1.txt";
+	FString FileName5_2 = GameDir + "XAI_record/lemon_juice/5_2.txt";
+	FString FileName5_3 = GameDir + "XAI_record/lemon_juice/5_3.txt";
 
+	RecordApplied1 = 0;
+	RecordApplied2 = 0;
+	RecordApplied3 = 0;
+	RecordApplied4 = 0;
+	RecordApplied5 = 0;
 
 	if (FPaths::FileExists(FileName1))
 	{
