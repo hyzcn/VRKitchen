@@ -10,6 +10,15 @@ AEvalTest::AEvalTest()
 	PoseRecord = false;
 	RecordInterval = 0.01;
 	TestRes = "";
+	OpenCabinetDoorFlag = false;
+	OpenFridgeDoorFlag = false;
+	OpenFridgeDoorFlag1 = false;
+	ShowMenu = -1;
+	RecordApplied1 = 0;
+	RecordApplied2 = 0;
+	RecordApplied3 = 0;
+	RecordApplied4 = 0;
+	RecordApplied5 = 0;
 }
 
 void AEvalTest::BeginPlay()
@@ -28,8 +37,7 @@ void AEvalTest::BeginPlay()
 	FString FileName5_1 = GameDir + "5_1.txt";
 	FString FileName5_2 = GameDir + "5_2.txt";
 	FString FileName5_3 = GameDir + "5_3.txt";
-	OpenDoorFlag = false;
-	ShowMenu = -1;
+
 
 	if (FPaths::FileExists(FileName1))
 	{
@@ -112,12 +120,6 @@ void AEvalTest::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("file 5_3 record count: %d"), FieldCount);
 	}
 
-	RecordApplied1 = 0;
-	RecordApplied2 = 0;
-	RecordApplied3 = 0;
-	RecordApplied4 = 0;
-	RecordApplied5 = 0;
-
 	for (TObjectIterator<AIKPawn> ActorItr; ActorItr; ++ActorItr)
 		HumanPawn = *ActorItr;
 
@@ -137,7 +139,11 @@ void AEvalTest::BeginPlay()
 	{
 		if (ActorItr->GetName() == TEXT("fridge_mainDoor"))
 		{
-			LeftDoor = *ActorItr;
+			FridgeDoor = *ActorItr;
+		}
+		else if (ActorItr->GetName() == TEXT("CabinetDoor"))
+		{
+			CabinetDoor = *ActorItr;
 		}
 
 	}
@@ -179,6 +185,12 @@ void AEvalTest::RecordActors()
 	}
 	else if (HumanPawn->ActionToTake == 1)
 	{
+		if (OpenFridgeDoorFlag == false)
+		{
+			OpenFridgeDoorFlag = true;
+			FRotator DoorOpenRot(0,0,90);
+			FridgeDoor->GetStaticMeshComponent()->SetRelativeRotation(DoorOpenRot);
+		}
 		if (RecordApplied2 < ApplyPoseArray2.Num())
 		{
 			HumanRecord = ApplyPoseArray2[RecordApplied2];
@@ -231,12 +243,6 @@ void AEvalTest::RecordActors()
 	}
 	else if (HumanPawn->ActionToTake == 3)
 	{
-		if (OpenDoorFlag == false)
-		{
-			OpenDoorFlag = true;
-			FRotator DoorOpenRot(0, 0, 0);
-			LeftDoor->GetStaticMeshComponent()->SetRelativeRotation(DoorOpenRot);
-		}
 		if (RecordApplied2 < ApplyPoseArray2.Num())
 		{
 			HumanRecord = ApplyPoseArray2[RecordApplied2];
@@ -264,6 +270,12 @@ void AEvalTest::RecordActors()
 
 	else if (HumanPawn->ActionToTake == 4)
 	{
+		if (OpenCabinetDoorFlag == false)
+		{
+			OpenCabinetDoorFlag = true;
+			FRotator DoorOpenRot(0, 80, 0);
+			CabinetDoor->GetStaticMeshComponent()->SetRelativeRotation(DoorOpenRot);
+		}
 		if (RecordApplied5 < ApplyPoseArray5_1.Num())
 		{
 			HumanRecord = ApplyPoseArray5_1[RecordApplied5];
@@ -284,6 +296,12 @@ void AEvalTest::RecordActors()
 	}
 	else if (HumanPawn->ActionToTake == 6)
 	{
+		if (OpenFridgeDoorFlag1 == false)
+		{
+			OpenFridgeDoorFlag1 = true;
+			FRotator DoorOpenRot(0, 0, 90);
+			FridgeDoor->GetStaticMeshComponent()->SetRelativeRotation(DoorOpenRot);
+		}
 		if (RecordApplied5 < ApplyPoseArray5_3.Num())
 		{
 			HumanRecord = ApplyPoseArray5_3[RecordApplied5];

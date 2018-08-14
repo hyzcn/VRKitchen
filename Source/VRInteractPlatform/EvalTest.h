@@ -37,7 +37,8 @@ public:
 	int32 RecordApplied5;
 
 private:
-	AOnOffObject* LeftDoor;
+	AOnOffObject* FridgeDoor;
+	AOnOffObject* CabinetDoor;
 	FString HumanRecord;
 	bool PoseRecord;
 	FString PoseData;
@@ -63,7 +64,9 @@ private:
 	TArray<FString> ApplyPoseArray5_1;
 	TArray<FString> ApplyPoseArray5_2;
 	TArray<FString> ApplyPoseArray5_3;
-	bool OpenDoorFlag;
+	bool OpenFridgeDoorFlag;
+	bool OpenFridgeDoorFlag1;
+	bool OpenCabinetDoorFlag;
 	int ShowMenu;
 	FString TestRes;
 
