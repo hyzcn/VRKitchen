@@ -101,6 +101,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
 		int ActionToTake;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
+		TArray<int32> AnsArr;
+
 protected:
 	float UpdateInterval;
 	TArray<UPrimitiveComponent*> LeftHandGrabbedComponents;
@@ -113,6 +116,8 @@ private:
 	Document doc;
 	bool LeftSqueeze;
 	bool RightSqueeze;
+
+
 
 	
 	// bool PoseRecord;

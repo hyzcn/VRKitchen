@@ -1,17 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "VRInteractPlatform.h"
-#include "DemoGameModeRecPlay.h"
+#include "EvalTest.h"
 
-ADemoGameModeRecPlay::ADemoGameModeRecPlay()
+AEvalTest::AEvalTest()
 {
 	// DefaultPawnClass = AIKPawn::StaticClass();
 	PoseData = "";
 	PoseRecord = false;
 	RecordInterval = 0.01;
+	TestRes = "";
 }
 
-void ADemoGameModeRecPlay::BeginPlay()
+void AEvalTest::BeginPlay()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -127,12 +128,14 @@ void ADemoGameModeRecPlay::BeginPlay()
 	{
 
 		MachineActor = *ActorItr;
-
 	}
+
+	if (MachineActor == NULL)
+		UE_LOG(LogTemp, Warning, TEXT("Can't find machine"));
 
 	for (TObjectIterator<AOnOffObject> ActorItr; ActorItr; ++ActorItr)
 	{
-		if (ActorItr->GetName() == TEXT("CabinetLeftDoor"))
+		if (ActorItr->GetName() == TEXT("fridge_mainDoor"))
 		{
 			LeftDoor = *ActorItr;
 		}
@@ -140,11 +143,11 @@ void ADemoGameModeRecPlay::BeginPlay()
 	}
 
 	FTimerHandle ReceiverHandler;
-	GetWorldTimerManager().SetTimer(ReceiverHandler, this, &ADemoGameModeRecPlay::RecordActors, RecordInterval, true);
+	GetWorldTimerManager().SetTimer(ReceiverHandler, this, &AEvalTest::RecordActors, RecordInterval, true);
 
 }
 
-void ADemoGameModeRecPlay::Tick(float DeltaSeconds)
+void AEvalTest::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	// UE_LOG(LogTemp, Warning,TEXT("Door rotation %s"), *(Door->GetActorRotation().ToString()));
@@ -152,11 +155,11 @@ void ADemoGameModeRecPlay::Tick(float DeltaSeconds)
 
 }
 
-void ADemoGameModeRecPlay::RecordActors()
+void AEvalTest::RecordActors()
 {
 	/*
-		if (HumanPawn)
-		HumanPawn->UpdateAnim(PoseData);
+	if (HumanPawn)
+	HumanPawn->UpdateAnim(PoseData);
 	*/
 
 	if (HumanPawn->ActionToTake == -1)
@@ -182,9 +185,9 @@ void ADemoGameModeRecPlay::RecordActors()
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied2++;
 		}
-		else if (RecordApplied3 < ApplyPoseArray3_3.Num())
+		else if (RecordApplied3 < ApplyPoseArray3_1.Num())
 		{
-			HumanRecord = ApplyPoseArray3_3[RecordApplied3];
+			HumanRecord = ApplyPoseArray3_1[RecordApplied3];
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied3++;
 		}
@@ -231,7 +234,7 @@ void ADemoGameModeRecPlay::RecordActors()
 		if (OpenDoorFlag == false)
 		{
 			OpenDoorFlag = true;
-			FRotator DoorOpenRot(0,180,0);
+			FRotator DoorOpenRot(0, 0, 0);
 			LeftDoor->GetStaticMeshComponent()->SetRelativeRotation(DoorOpenRot);
 		}
 		if (RecordApplied2 < ApplyPoseArray2.Num())
@@ -240,9 +243,9 @@ void ADemoGameModeRecPlay::RecordActors()
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied2++;
 		}
-		else if (RecordApplied3 < ApplyPoseArray3_1.Num())
+		else if (RecordApplied3 < ApplyPoseArray3_3.Num())
 		{
-			HumanRecord = ApplyPoseArray3_1[RecordApplied3];
+			HumanRecord = ApplyPoseArray3_3[RecordApplied3];
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied3++;
 		}
@@ -261,9 +264,9 @@ void ADemoGameModeRecPlay::RecordActors()
 
 	else if (HumanPawn->ActionToTake == 4)
 	{
-		if (RecordApplied5 < ApplyPoseArray5_2.Num())
+		if (RecordApplied5 < ApplyPoseArray5_1.Num())
 		{
-			HumanRecord = ApplyPoseArray5_2[RecordApplied5];
+			HumanRecord = ApplyPoseArray5_1[RecordApplied5];
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied5++;
 		}
@@ -271,9 +274,9 @@ void ADemoGameModeRecPlay::RecordActors()
 	}
 	else if (HumanPawn->ActionToTake == 5)
 	{
-		if (RecordApplied5 < ApplyPoseArray5_1.Num())
+		if (RecordApplied5 < ApplyPoseArray5_2.Num())
 		{
-			HumanRecord = ApplyPoseArray5_1[RecordApplied5];
+			HumanRecord = ApplyPoseArray5_2[RecordApplied5];
 			MachineActor->UpdateAnim(HumanRecord);
 			RecordApplied5++;
 		}
@@ -293,16 +296,28 @@ void ADemoGameModeRecPlay::RecordActors()
 	/*
 	if (RecordApplied2 < ApplyPoseArray2.Num())
 	{
-		FString HumanRecord2 = ApplyPoseArray2[RecordApplied2];
-		MachineActor->UpdateAnim(HumanRecord2);
-		RecordApplied2++;
+	FString HumanRecord2 = ApplyPoseArray2[RecordApplied2];
+	MachineActor->UpdateAnim(HumanRecord2);
+	RecordApplied2++;
 	}
 	*/
 }
 
-void ADemoGameModeRecPlay::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void AEvalTest::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	// Save evaluation result
 	Super::EndPlay(EndPlayReason);
+	FString GameDir = FPaths::GameDir();
+	FString SaveFileName = GameDir + "TestResult" + ".txt";
+	for (auto& ans : HumanPawn->AnsArr)
+	{
+		TestRes += std::to_string(ans).c_str();
+		TestRes += "\n";
+	}
+
+	FFileHelper::SaveStringToFile(TestRes, *SaveFileName, FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get());
 }
+
+
 
 
