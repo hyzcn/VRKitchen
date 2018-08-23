@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "GameFramework/Actor.h"
@@ -56,7 +54,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "PourContainer")
 		float MouthRadius;
 
-	UPROPERTY(EditAnywhere, Category = "PourContainer")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
 		float FlowRate;
 
 	UPROPERTY(EditAnywhere, Category = "PourContainer")
@@ -72,6 +70,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "PourContainer", Meta = (BlueprintProtected = "true"))
 		FString Item_ID;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "PourContainer")
+		bool Drop;
 
 	//UFUNCTION(BlueprintCallable, Category = "Pouring")
 	//	void PourFluid(float PourAmount);

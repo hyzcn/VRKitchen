@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "GameFramework/Actor.h"
@@ -13,16 +11,16 @@ UCLASS()
 class VRINTERACTPLATFORM_API APickCookCutObject : public AStaticMeshActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APickCookCutObject();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	UTimelineComponent* MyTimeLine;
 
@@ -31,6 +29,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		bool Cut;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
+		bool Spoon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objects")
 		bool CanChangeColor;

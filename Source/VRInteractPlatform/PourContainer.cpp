@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "VRInteractPlatform.h"
 #include "PourContainer.h"
 
@@ -15,8 +13,8 @@ APourContainer::APourContainer()
 	FillMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FillMesh"));
 	FluidParticles = CreateDefaultSubobject<UFluidPouringComponent>(TEXT("FluidParticles"));
 	RootComponent = ContainerMesh;
-	UpArrow->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
-	FluidParticles->AttachToComponent(UpArrow, FAttachmentTransformRules::KeepWorldTransform);
+	UpArrow->SetupAttachment(RootComponent);
+	FluidParticles->SetupAttachment(UpArrow);
 
 	// FluidParticles->Deactivate();
 	FluidParticles->Activate();
@@ -57,6 +55,7 @@ void APourContainer::Tick(float DeltaTime)
 																										   //MaxFillFraction = 1 - FVector::CrossProduct(UpArrow->GetForwardVector(), FVector(0, 0, 1)).Size()*MouthDiameter;
 	if (MaxFillFraction < CurrentFillFraction && Open)
 	{
+		Drop = true;
 		if (CurrentFillFraction > 0)
 		{
 			FluidParticles->PourFluid(FluidColor, FlowRate * DeltaTime);
@@ -76,6 +75,7 @@ void APourContainer::Tick(float DeltaTime)
 	else
 	{
 		FluidParticles->Deactivate();
+		Drop = false;
 	}
 	if (FluidMaterialRef)
 		FluidMaterialRef->SetScalarParameterValue(FName("FillHeight"), CurrentFillFraction);
@@ -103,5 +103,3 @@ void APourContainer::RecieveFluid(FLinearColor NewFluidColor, float FluidAmount,
 	ContainedFluids.AddUnique(FluidKind);
 
 }
-
-

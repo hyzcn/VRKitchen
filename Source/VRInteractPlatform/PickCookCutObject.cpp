@@ -14,6 +14,7 @@ APickCookCutObject::APickCookCutObject()
 	Cut = false;
 	CanSqueeze = false;
 	OnFire = false;
+	Spoon = false;
 	MyTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("MyTimeLine"));
 }
 
