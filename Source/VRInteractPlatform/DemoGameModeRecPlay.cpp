@@ -8,6 +8,7 @@ ADemoGameModeRecPlay::ADemoGameModeRecPlay()
 	// DefaultPawnClass = AIKPawn::StaticClass();
 	PoseData = "";
 	PoseRecord = false;
+	TrainRes = "";
 	RecordInterval = 0.01;
 }
 
@@ -302,7 +303,23 @@ void ADemoGameModeRecPlay::RecordActors()
 
 void ADemoGameModeRecPlay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	// Save evaluation result
 	Super::EndPlay(EndPlayReason);
+	FString GameDir = FPaths::GameDir();
+	FString SaveFileName = GameDir + "TrainResult" + ".txt";
+	for (auto& ans : HumanPawn->AnsArr)
+	{
+		TrainRes += std::to_string(ans).c_str();
+		TrainRes += "\n";
+	}
+
+	TrainRes += "\n";
+
+	for (auto& ans : HumanPawn->NumExpArr)
+	{
+		TrainRes += std::to_string(ans).c_str();
+		TrainRes += "\n";
+	}
+
+	FFileHelper::SaveStringToFile(TrainRes, *SaveFileName, FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get());
 }
-
-

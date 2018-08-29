@@ -104,6 +104,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
 		TArray<int32> AnsArr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IKPawn")
+		TArray<int32> NumExpArr;
+
 protected:
 	float UpdateInterval;
 	TArray<UPrimitiveComponent*> LeftHandGrabbedComponents;

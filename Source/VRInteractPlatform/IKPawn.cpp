@@ -72,7 +72,7 @@ AIKPawn::AIKPawn()
 void AIKPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	ShowMenuFlag = false;
+	ShowMenuFlag = true;
 
 	// PoseRecord = false;
 	/*
