@@ -10,6 +10,7 @@ ADemoGameModeRecPlay::ADemoGameModeRecPlay()
 	PoseRecord = false;
 	TrainRes = "";
 	RecordInterval = 0.01;
+	TimeStart = 0;
 }
 
 void ADemoGameModeRecPlay::BeginPlay()
@@ -164,8 +165,13 @@ void ADemoGameModeRecPlay::RecordActors()
 	{
 		ShowMenu = 0;
 	}
+	else if (TimeStart == 0)
+	{
+		TimeStart = FPlatformTime::Seconds();
+	}
 	else if (RecordApplied1 < ApplyPoseArray1.Num())
 	{
+		
 		HumanRecord = ApplyPoseArray1[RecordApplied1];
 		MachineActor->UpdateAnim(HumanRecord);
 		RecordApplied1++;
@@ -305,6 +311,7 @@ void ADemoGameModeRecPlay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	// Save evaluation result
 	Super::EndPlay(EndPlayReason);
+	TimeUsed = FPlatformTime::Seconds() - TimeStart;
 	FString GameDir = FPaths::GameDir();
 	FString SaveFileName = GameDir + "TrainResult" + ".txt";
 	for (auto& ans : HumanPawn->AnsArr)
@@ -320,6 +327,8 @@ void ADemoGameModeRecPlay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		TrainRes += std::to_string(ans).c_str();
 		TrainRes += "\n";
 	}
+
+	TrainRes += std::to_string(TimeUsed).c_str();
 
 	FFileHelper::SaveStringToFile(TrainRes, *SaveFileName, FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get());
 }

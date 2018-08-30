@@ -65,4 +65,6 @@ private:
 	bool OpenDoorFlag;
 	int ShowMenu;
 	FString TrainRes;
+	double TimeStart;
+	double TimeUsed;
 };

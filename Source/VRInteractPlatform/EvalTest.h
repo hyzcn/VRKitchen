@@ -69,6 +69,8 @@ private:
 	bool OpenCabinetDoorFlag;
 	int ShowMenu;
 	FString TestRes;
+	double TimeStart;
+	double TimeUsed;
 
 };
 	
