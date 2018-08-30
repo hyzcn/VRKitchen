@@ -24,13 +24,13 @@ for fn in os.listdir(noX_path):
 	if "Test" in fn:
 		f = open(noX_path+fn, "r")
 		temp = []
+		data = f.readlines()
 		if len(data) > 18:
 			data = data[:-1]
 		print data
 		for line in data:
 			temp.append(int(line.strip()))
 		noX_result.append(temp)
-
 
 robot_knowledge1 = [4, 5, 3]
 robot_knowledge2 = [[4, 3, 3], [4, 3, 3], [4, 5, 3]]
