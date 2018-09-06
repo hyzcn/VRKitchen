@@ -42,7 +42,7 @@ void ADemoGameModeRecPlay::BeginPlay()
 
 	for (TObjectIterator<ATouchAnimateActor> ActorItr; ActorItr; ++ActorItr)
 	{
-		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_2"))
+		if (ActorItr->GetName() == TEXT("FemaleActor"))
 		{
 			HumanPawn2 = *ActorItr;
 		}
