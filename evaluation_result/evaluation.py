@@ -1,6 +1,9 @@
 from __future__ import division
 import os
 import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import scipy.stats as stats
 
 my_path = os.getcwd()
 x_path = my_path+"/X/"
@@ -15,7 +18,6 @@ for fn in os.listdir(x_path):
 		data = f.readlines()
 		if len(data) > 18:
 			data = data[:-1]
-		print data
 		for line in data:
 			temp.append(int(line.strip()))
 		X_result.append(temp)
@@ -27,7 +29,6 @@ for fn in os.listdir(noX_path):
 		data = f.readlines()
 		if len(data) > 18:
 			data = data[:-1]
-		print data
 		for line in data:
 			temp.append(int(line.strip()))
 		noX_result.append(temp)
@@ -289,8 +290,16 @@ def GetTrustRel(X_result):
 	return np.mean(rel_plans, axis=0), np.mean(rel_knows, axis=0), np.mean(trust_plans, axis=0), np.mean(trust_knows, axis=0)
 
 
-print GetTrustRel(X_result)
-print GetTrustRel(noX_result)
+# print GetTrustRel(X_result)
+# print GetTrustRel(noX_result)
+
+reliance_plan_X, reliance_know_X, trust_plan_X, trust_know_X = GetTrustRel(X_result)
+reliance_plan_NoX, reliance_know_NoX, trust_plan_NoX, trust_know_NoX = GetTrustRel(noX_result)
+
+plt.plot(reliance_know_X)
+plt.plot(reliance_know_NoX)
+plt.legend(["With X", "Without X"])
+plt.show()
 
 
 

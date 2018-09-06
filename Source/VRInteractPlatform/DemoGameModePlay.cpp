@@ -45,7 +45,7 @@ void ADemoGameModePlay::BeginPlay()
 		{
 			HumanPawn1 = *ActorItr;
 		}
-		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_5"))
+		if (ActorItr->GetName() == TEXT("TouchAnimateActorBP2_2"))
 		{
 			HumanPawn2 = *ActorItr;
 		}
