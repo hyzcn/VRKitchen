@@ -216,7 +216,7 @@ def GetTrustRel(X_result):
 				same += 1
 		rel_plan_cur += same/len(r_plan)
 
-		for key in minu_plan:
+		for key in [minu_plan[0]]:
 			if key in plan.keys() and h_plan in plan[key]:
 				trust_plan_cur += 1/len(plan[key])
 				break
@@ -295,7 +295,7 @@ def GetTrustRel(X_result):
 				same += 1
 		rel_plan_cur += same/len(r_plan)
 
-		for key in minu_plan:
+		for key in [minu_plan[0]]:
 			if key in plan.keys() and h_plan in plan[key]:
 				trust_plan_cur += 1/len(plan[key])
 				break
@@ -334,28 +334,28 @@ def GetTrustRel(X_result):
 reliance_plan_X, reliance_know_X, trust_plan_X, trust_know_X = GetTrustRel(X_result)
 reliance_plan_NoX, reliance_know_NoX, trust_plan_NoX, trust_know_NoX = GetTrustRel(noX_result)
 
-print trust_plan_X
-print trust_plan_NoX
+print np.mean(reliance_plan_X, axis=0)
+print np.mean(reliance_plan_NoX, axis=0)
 
-# plt.plot(np.mean(reliance_plan_X, axis=0))
-# plt.plot(np.mean(reliance_plan_NoX, axis=0))
-# plt.legend(["With X", "Without X"])
-# plt.show()
+plt.plot(np.mean(reliance_plan_X, axis=0))
+plt.plot(np.mean(reliance_plan_NoX, axis=0))
+plt.legend(["With X", "Without X"])
+plt.show()
 
-# plt.plot(np.mean(reliance_know_X, axis=0))
-# plt.plot(np.mean(reliance_know_NoX, axis=0))
-# plt.legend(["With X", "Without X"])
-# plt.show()
+plt.plot(np.mean(reliance_know_X, axis=0))
+plt.plot(np.mean(reliance_know_NoX, axis=0))
+plt.legend(["With X", "Without X"])
+plt.show()
 
-# plt.plot(np.mean(trust_plan_X, axis=0))
-# plt.plot(np.mean(trust_plan_NoX, axis=0))
-# plt.legend(["With X", "Without X"])
-# plt.show()
+plt.plot(np.mean(trust_plan_X, axis=0))
+plt.plot(np.mean(trust_plan_NoX, axis=0))
+plt.legend(["With X", "Without X"])
+plt.show()
 
-# plt.plot(np.mean(trust_know_X, axis=0))
-# plt.plot(np.mean(trust_know_NoX, axis=0))
-# plt.legend(["With X", "Without X"])
-# plt.show()
+plt.plot(np.mean(trust_know_X, axis=0))
+plt.plot(np.mean(trust_know_NoX, axis=0))
+plt.legend(["With X", "Without X"])
+plt.show()
 
 
 
