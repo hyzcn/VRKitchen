@@ -14,8 +14,8 @@ X_train = []
 noX_train = []
 
 for fn in os.listdir(x_path):
-	print fn
 	if "Test" in fn:
+		print fn
 		f = open(x_path+fn, "r")
 		temp = []
 		data = f.readlines()
@@ -195,7 +195,7 @@ def GetTrustRel(X_result):
 
 		same = 0
 		for i in range(len(r_know)):
-			if r_know[i] == minu_know[i]:
+			if r_know[i] == minu_know[i] and h_know[i] == minu_know[i]:
 				same += 1
 		rel_know_cur = same/len(r_know)
 
@@ -206,7 +206,7 @@ def GetTrustRel(X_result):
 		# after first action
 		r_plan = robot_plan2
 		r_know = robot_knowledge2[h_plan_idx-1]
-		if h_plan == 0 or h_plan == 1:
+		if h_plan == "open fridge" or h_plan == "point to the fridge":
 			minu_know[1] = 3
 
 		# get trust and reliance for plan
@@ -233,7 +233,7 @@ def GetTrustRel(X_result):
 
 		same = 0
 		for i in range(len(r_know)):
-			if r_know[i] == minu_know[i]:
+			if r_know[i] == minu_know[i] and h_know[i] == minu_know[i]:
 				same += 1
 		rel_know_cur += same/len(r_know)
 
@@ -260,7 +260,6 @@ def GetTrustRel(X_result):
 			minu_plan.append(minu_label[i][item-1])
 			i += 1
 
-
 		# get trust and reliance for plan
 		rel_plan_single.append(rel_plan_cur)
 		trust_plan_single.append(trust_plan_cur)
@@ -274,7 +273,7 @@ def GetTrustRel(X_result):
 
 		same = 0
 		for i in range(len(r_know)):
-			if r_know[i] == minu_know[i]:
+			if r_know[i] == minu_know[i] and h_know[i] == minu_know[i]:
 				same += 1
 		rel_know_cur += same/len(r_know)
 
@@ -285,7 +284,7 @@ def GetTrustRel(X_result):
 		# after second action
 		r_plan = robot_plan4
 		r_know = robot_knowledge4[h_plan_idx-1]
-		if h_plan == 0 or h_plan == 1:
+		if h_plan == "open cabinet" or h_plan == "point to the cabin":
 			minu_know[0] = 1
 
 		# get trust and reliance for plan
@@ -306,13 +305,13 @@ def GetTrustRel(X_result):
 		# get trust and reliance for knowledge
 		same = 0
 		for i in range(len(h_know)):
-			if h_know[i] == minu_know[i]:
+			if h_know[i] == minu_know[i] and h_know[i] == minu_know[i]:
 				same += 1
 		trust_know_cur += same/len(h_know)
 
 		same = 0
 		for i in range(len(r_know)):
-			if r_know[i] == minu_know[i]:
+			if r_know[i] == minu_know[i] and h_know[i] == minu_know[i]:
 				same += 1
 		rel_know_cur += same/len(r_know)
 
@@ -334,8 +333,11 @@ def GetTrustRel(X_result):
 reliance_plan_X, reliance_know_X, trust_plan_X, trust_know_X = GetTrustRel(X_result)
 reliance_plan_NoX, reliance_know_NoX, trust_plan_NoX, trust_know_NoX = GetTrustRel(noX_result)
 
-print np.mean(reliance_plan_X, axis=0)
-print np.mean(reliance_plan_NoX, axis=0)
+print reliance_plan_X
+print reliance_know_X
+print trust_plan_X
+print trust_know_X
+
 
 plt.plot(np.mean(reliance_plan_X, axis=0))
 plt.plot(np.mean(reliance_plan_NoX, axis=0))
