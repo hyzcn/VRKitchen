@@ -3,15 +3,18 @@ import os
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import scipy.stats as stats
+# import scipy.stats as stats
 
 my_path = os.getcwd()
-x_path = my_path+"/X/"
-noX_path = my_path+"/noX/"
+x_path = my_path+"\\X\\"
+noX_path = my_path+"\\noX\\"
 X_result = []
 noX_result = []
+X_train = []
+noX_train = []
 
 for fn in os.listdir(x_path):
+	print fn
 	if "Test" in fn:
 		f = open(x_path+fn, "r")
 		temp = []
@@ -21,6 +24,17 @@ for fn in os.listdir(x_path):
 		for line in data:
 			temp.append(int(line.strip()))
 		X_result.append(temp)
+
+for fn in os.listdir(x_path):
+	if "Train" in fn:
+		f = open(x_path+fn, "r")
+		temp = []
+		data = f.readlines()
+		if len(data) > 2:
+			data = data[0:2]
+		for line in data:
+			temp.append(int(line.strip()))
+		X_train.append(temp)
 
 for fn in os.listdir(noX_path):
 	if "Test" in fn:
@@ -32,6 +46,29 @@ for fn in os.listdir(noX_path):
 		for line in data:
 			temp.append(int(line.strip()))
 		noX_result.append(temp)
+
+for fn in os.listdir(noX_path):
+	if "Train" in fn:
+		f = open(noX_path+fn, "r")
+		temp = []
+		data = f.readlines()
+		if len(data) > 2:
+			data = data[0:2]
+		for line in data:
+			temp.append(int(line.strip()))
+		noX_train.append(temp)
+
+X_trust_plan_train = []
+noX_rel_plan_train = []
+
+for item in X_train:
+	X_trust_plan_train.append(int(item[0] == 3)*1/4)
+
+for item in noX_train:
+	noX_rel_plan_train.append(int(item[0] == 3)*1/4)
+
+# print X_trust_plan_train
+# print noX_rel_plan_train
 
 robot_knowledge1 = [4, 5, 3]
 robot_knowledge2 = [[4, 3, 3], [4, 3, 3], [4, 5, 3]]
@@ -48,9 +85,9 @@ lemon_state = ["", "in the red cabinet", "on the table", "in the fridge", "on th
 juicer_state = ["", "in the red cabinet", "in the fridge", "on the table", "no idea"]
 
 plan = {
-	"take the lemon": ["open fridge", "grab lemon", "close fridge"], 
+	"take the lemon": ["go to fridge", "open fridge", "grab lemon", "close fridge"], 
 	"cut the lemon": ["grab knife", "cut", "place knife"], 
-	"take the cup": ["open cabinet", "grab cup", "close cabinet"], 
+	"take the cup": ["go to cabinet", "open cabinet", "grab cup", "close cabinet"], 
 	"use the juicer": ["place cup", "place lemon"]
 }
 
@@ -179,8 +216,8 @@ def GetTrustRel(X_result):
 				same += 1
 		rel_plan_cur += same/len(r_plan)
 
-		for key in r_plan:
-			if h_plan in plan[key]:
+		for key in minu_plan:
+			if key in plan.keys() and h_plan in plan[key]:
 				trust_plan_cur += 1/len(plan[key])
 				break
 
@@ -223,6 +260,7 @@ def GetTrustRel(X_result):
 			minu_plan.append(minu_label[i][item-1])
 			i += 1
 
+
 		# get trust and reliance for plan
 		rel_plan_single.append(rel_plan_cur)
 		trust_plan_single.append(trust_plan_cur)
@@ -257,8 +295,8 @@ def GetTrustRel(X_result):
 				same += 1
 		rel_plan_cur += same/len(r_plan)
 
-		for key in r_plan:
-			if h_plan in plan[key]:
+		for key in minu_plan:
+			if key in plan.keys() and h_plan in plan[key]:
 				trust_plan_cur += 1/len(plan[key])
 				break
 
@@ -287,7 +325,7 @@ def GetTrustRel(X_result):
 		trust_knows[j] = trust_know_single
 		j += 1
 
-	return np.mean(rel_plans, axis=0), np.mean(rel_knows, axis=0), np.mean(trust_plans, axis=0), np.mean(trust_knows, axis=0)
+	return rel_plans, rel_knows, trust_plans, trust_knows
 
 
 # print GetTrustRel(X_result)
@@ -296,10 +334,29 @@ def GetTrustRel(X_result):
 reliance_plan_X, reliance_know_X, trust_plan_X, trust_know_X = GetTrustRel(X_result)
 reliance_plan_NoX, reliance_know_NoX, trust_plan_NoX, trust_know_NoX = GetTrustRel(noX_result)
 
-plt.plot(reliance_know_X)
-plt.plot(reliance_know_NoX)
-plt.legend(["With X", "Without X"])
-plt.show()
+print trust_plan_X
+print trust_plan_NoX
+
+# plt.plot(np.mean(reliance_plan_X, axis=0))
+# plt.plot(np.mean(reliance_plan_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.show()
+
+# plt.plot(np.mean(reliance_know_X, axis=0))
+# plt.plot(np.mean(reliance_know_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.show()
+
+# plt.plot(np.mean(trust_plan_X, axis=0))
+# plt.plot(np.mean(trust_plan_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.show()
+
+# plt.plot(np.mean(trust_know_X, axis=0))
+# plt.plot(np.mean(trust_know_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.show()
+
 
 
 

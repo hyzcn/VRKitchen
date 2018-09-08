@@ -34,7 +34,10 @@ void ATouchGameModePlay::BeginPlay()
 		BaxterRobot = *ActorItr;
 
 	for (TObjectIterator<ATouchAnimateActor> ActorItr; ActorItr; ++ActorItr)
-		HumanPawn = *ActorItr;
+	{
+		if (ActorItr->GetName() == TEXT("FemaleActor"))
+			HumanPawn = *ActorItr;
+	}
 
 	if (HumanPawn == NULL)
 		UE_LOG(LogTemp, Warning, TEXT("Can't find human pawn"));
