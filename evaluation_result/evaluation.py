@@ -13,13 +13,16 @@ noX_result = []
 X_train = []
 noX_train = []
 
+time_X = np.array(())
+time_noX = np.array(())
+
 for fn in os.listdir(x_path):
 	if "Test" in fn:
-		print fn
 		f = open(x_path+fn, "r")
 		temp = []
 		data = f.readlines()
 		if len(data) > 18:
+			time_X = np.append(time_X, float(data[-1]))
 			data = data[:-1]
 		for line in data:
 			temp.append(int(line.strip()))
@@ -42,6 +45,7 @@ for fn in os.listdir(noX_path):
 		temp = []
 		data = f.readlines()
 		if len(data) > 18:
+			time_noX = np.append(time_noX, float(data[-1]))
 			data = data[:-1]
 		for line in data:
 			temp.append(int(line.strip()))
@@ -57,6 +61,10 @@ for fn in os.listdir(noX_path):
 		for line in data:
 			temp.append(int(line.strip()))
 		noX_train.append(temp)
+
+avg_time_X = np.mean(time_X)
+avg_time_noX = np.mean(time_noX)
+print(avg_time_X, avg_time_noX)
 
 X_trust_plan_train = []
 noX_rel_plan_train = []
@@ -90,6 +98,58 @@ plan = {
 	"take the cup": ["go to cabinet", "open cabinet", "grab cup", "close cabinet"], 
 	"use the juicer": ["place cup", "place lemon"]
 }
+
+
+
+def PredAccur(X_result):
+	know_gt = [2,2,3,3,2,3]
+	plan_gt = [1,3,3,2]
+	know_res = []
+	plan_res = []
+	know_accur = 0
+	plan_accur = 0
+
+	for res in X_result:
+		know_res.append(res[3:6]+res[12:15])
+		plan_res.append(res[6:8]+res[15:17])
+
+	cnt = 0
+	num_pt = 0
+	for res in know_res:
+		gt = np.array(know_gt)
+		data = np.array(res)
+		cnt += np.sum(gt == data)
+		num_pt += 6
+	know_accur = 1.0*cnt/num_pt
+
+	cnt = 0
+	num_pt = 0
+	for res in plan_res:
+		gt = np.array(plan_gt)
+		data = np.array(res)
+		cnt += np.sum(gt == data)
+		num_pt += 3
+
+	plan_accur = 1.0*cnt/num_pt
+
+	# print know_accur, plan_accur
+
+	return know_accur, plan_accur
+
+know_ac_X, plan_ac_X = PredAccur(X_result)
+know_ac_noX, plan_ac_noX = PredAccur(noX_result)
+
+# name_list = ["WithX", "WithoutX"]
+# num_list = [know_ac_X, know_ac_noX]
+# plt.title("Prediction accuracy for robot's knowledge")
+# plt.bar(range(len(num_list)), num_list, tick_label=name_list, color="bg")
+# plt.show()
+
+# name_list = ["WithX", "WithoutX"]
+# num_list = [plan_ac_X, plan_ac_noX]
+# plt.title("Prediction accuracy for robot's plan")
+# plt.bar(range(len(num_list)), num_list, tick_label=name_list, color="bg")
+# plt.show()
 
 for res in X_result:
 	if res[3] == 2:
@@ -149,17 +209,19 @@ for res in noX_result:
 	if res[14] == 2:
 		res[14] += 2
 
+
+
 def GetTrustRel(X_result):
 	j = 0
-	rel_plans = np.zeros((len(X_result), 4))
-	trust_plans = np.zeros((len(X_result), 4))
-	rel_knows = np.zeros((len(X_result), 4))
-	trust_knows = np.zeros((len(X_result), 4))
+	rel_plans = np.zeros((len(X_result), 5))
+	trust_plans = np.zeros((len(X_result), 5))
+	rel_knows = np.zeros((len(X_result), 5))
+	trust_knows = np.zeros((len(X_result), 5))
 	for res in X_result:
-		rel_plan_single = []
-		trust_plan_single = []
-		rel_know_single = []
-		trust_know_single = []
+		rel_plan_single = [0.0]
+		trust_plan_single = [0.0]
+		rel_know_single = [0.0]
+		trust_know_single = [0.0]
 
 		# before first action
 		h_know = res[:3]
@@ -318,6 +380,7 @@ def GetTrustRel(X_result):
 		rel_know_single.append(rel_know_cur)
 		trust_know_single.append(trust_know_cur)
 
+
 		rel_plans[j] = rel_plan_single
 		trust_plans[j] = trust_plan_single
 		rel_knows[j] = rel_know_single
@@ -339,25 +402,29 @@ print trust_plan_X
 print trust_know_X
 
 
-plt.plot(np.mean(reliance_plan_X, axis=0))
-plt.plot(np.mean(reliance_plan_NoX, axis=0))
-plt.legend(["With X", "Without X"])
-plt.show()
+# plt.plot(np.mean(reliance_plan_X, axis=0))
+# plt.plot(np.mean(reliance_plan_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.title("Reliance of plan")
+# plt.show()
 
-plt.plot(np.mean(reliance_know_X, axis=0))
-plt.plot(np.mean(reliance_know_NoX, axis=0))
-plt.legend(["With X", "Without X"])
-plt.show()
+# plt.plot(np.mean(reliance_know_X, axis=0))
+# plt.plot(np.mean(reliance_know_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.title("Reliance of knowledge")
+# plt.show()
 
-plt.plot(np.mean(trust_plan_X, axis=0))
-plt.plot(np.mean(trust_plan_NoX, axis=0))
-plt.legend(["With X", "Without X"])
-plt.show()
+# plt.plot(np.mean(trust_plan_X, axis=0))
+# plt.plot(np.mean(trust_plan_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.title("Trust of plan")
+# plt.show()
 
-plt.plot(np.mean(trust_know_X, axis=0))
-plt.plot(np.mean(trust_know_NoX, axis=0))
-plt.legend(["With X", "Without X"])
-plt.show()
+# plt.plot(np.mean(trust_know_X, axis=0))
+# plt.plot(np.mean(trust_know_NoX, axis=0))
+# plt.legend(["With X", "Without X"])
+# plt.title("Trust of knowledge")
+# plt.show()
 
 
 
