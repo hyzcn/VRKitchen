@@ -210,7 +210,6 @@ for res in noX_result:
 		res[14] += 2
 
 
-
 def GetTrustRel(X_result):
 	j = 0
 	rel_plans = np.zeros((len(X_result), 5))
@@ -425,9 +424,5 @@ print trust_know_X
 # plt.legend(["With X", "Without X"])
 # plt.title("Trust of knowledge")
 # plt.show()
-
-
-
-
 
 
