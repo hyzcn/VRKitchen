@@ -22,7 +22,7 @@ for fn in os.listdir(x_path):
 		temp = []
 		data = f.readlines()
 		if len(data) > 18:
-			time_X = np.append(time_X, float(data[-1]))
+			# time_X = np.append(time_X, float(data[-1]))
 			data = data[:-1]
 		for line in data:
 			temp.append(int(line.strip()))
@@ -33,8 +33,9 @@ for fn in os.listdir(x_path):
 		f = open(x_path+fn, "r")
 		temp = []
 		data = f.readlines()
-		if len(data) > 2:
-			data = data[0:2]
+		if len(data) > 3:
+			time_X = np.append(time_X, float(data[-1]))
+		data = data[0:2]
 		for line in data:
 			temp.append(int(line.strip()))
 		X_train.append(temp)
@@ -45,7 +46,7 @@ for fn in os.listdir(noX_path):
 		temp = []
 		data = f.readlines()
 		if len(data) > 18:
-			time_noX = np.append(time_noX, float(data[-1]))
+			# time_noX = np.append(time_noX, float(data[-1]))
 			data = data[:-1]
 		for line in data:
 			temp.append(int(line.strip()))
@@ -56,12 +57,15 @@ for fn in os.listdir(noX_path):
 		f = open(noX_path+fn, "r")
 		temp = []
 		data = f.readlines()
-		if len(data) > 2:
-			data = data[0:2]
+		if len(data) > 3:
+			time_noX = np.append(time_noX, float(data[-1]))
+		data = data[0:2]
 		for line in data:
 			temp.append(int(line.strip()))
 		noX_train.append(temp)
 
+print(time_X)
+print(time_noX)
 avg_time_X = np.mean(time_X)
 avg_time_noX = np.mean(time_noX)
 print(avg_time_X, avg_time_noX)
