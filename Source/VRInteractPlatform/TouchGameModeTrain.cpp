@@ -176,7 +176,7 @@ void ATouchGameModeTrain::BeginPlay()
 	}
 	else
 	{
-		CapComp = UGTCaptureComponent::Create(Cast<AActor>(BaxterRobot), Modes, World, BaxterRobot->CameraRoot);
+		CapComp = UGTCaptureComponents::Create(Cast<AActor>(BaxterRobot), Modes, World, BaxterRobot->CameraRoot);
 	}
 
 	if (Door == NULL)

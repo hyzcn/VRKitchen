@@ -61,7 +61,7 @@ ATouchAnimateActor::ATouchAnimateActor()
 
 	CameraRoot = CreateDefaultSubobject<USceneComponent>(TEXT("CameraRoot"));
 	SkeletalMesh->SetupAttachment(RootComponent);
-	CameraRoot->SetupAttachment(RootComponent);
+	CameraRoot->SetupAttachment(SkeletalMesh, FName("headSocket"));
 	Camera->SetupAttachment(CameraRoot);
 	MotionController_R->SetupAttachment(RootComponent);
 	MotionController_L->SetupAttachment(RootComponent);

@@ -5,16 +5,16 @@
 #include "cnpy/cnpy.h"
 #include "IImageWrapperModule.h"
 
-void UGTCaptureComponent::InitCaptureComponent(USceneCaptureComponent2D* CaptureComponent)
+void UGTCaptureComponents::InitCaptureComponent(USceneCaptureComponent2D* CaptureComponent)
 {
 	UWorld* World = GetWorld();
 	// Can not use ESceneCaptureSource::SCS_SceneColorHDR, this option will disable post-processing
 	CaptureComponent->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
 
 	CaptureComponent->TextureTarget = NewObject<UTextureRenderTarget2D>();
-	CaptureComponent->TextureTarget->InitAutoFormat(84, 84);
-	CaptureComponent->FOVAngle = 120;
-	CaptureComponent->RegisterComponentWithWorld(World); 
+	CaptureComponent->TextureTarget->InitAutoFormat(224, 224);
+	CaptureComponent->FOVAngle = 105;
+	CaptureComponent->RegisterComponentWithWorld(World);
 }
 
 void SaveExr(UTextureRenderTarget2D* RenderTarget, FString Filename)
@@ -48,7 +48,7 @@ void SavePng(UTextureRenderTarget2D* RenderTarget, FString Filename)
 	FFileHelper::SaveArrayToFile(ImgData, *Filename);
 }
 
-UMaterial* UGTCaptureComponent::GetMaterial(FString InModeName = TEXT(""))
+UMaterial* UGTCaptureComponents::GetMaterial(FString InModeName = TEXT(""))
 {
 	// Load material for visualization
 	static TMap<FString, FString>* MaterialPathMap = nullptr;
@@ -59,7 +59,7 @@ UMaterial* UGTCaptureComponent::GetMaterial(FString InModeName = TEXT(""))
 		MaterialPathMap->Add(TEXT("plane_depth"), TEXT("Material'/Game/Material/ScenePlaneDepthWorldUnits.ScenePlaneDepthWorldUnits'"));
 		MaterialPathMap->Add(TEXT("vis_depth"), TEXT("Material'/Game/Material/SceneDepth.SceneDepth'"));
 		MaterialPathMap->Add(TEXT("debug"), TEXT("Material'/Game/Material/debug.debug'"));
-		// MaterialPathMap->Add(TEXT("object_mask"), TEXT("Material'/Game/Material/VertexColorMaterial.VertexColorMaterial'"));
+		MaterialPathMap->Add(TEXT("object_mask"), TEXT("Material'/Game/Material/VertexColorMaterial.VertexColorMaterial'"));
 		MaterialPathMap->Add(TEXT("normal"), TEXT("Material'/Game/Material/WorldNormal.WorldNormal'"));
 
 		FString OpaqueMaterialName = "Material'/Game/Material/OpaqueMaterial.OpaqueMaterial'";
@@ -87,6 +87,7 @@ UMaterial* UGTCaptureComponent::GetMaterial(FString InModeName = TEXT(""))
 	if (Material == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Can not recognize visualization mode %s"), *InModeName);
+		UE_LOG(LogTemp, Warning, TEXT("not material"));
 	}
 	return Material;
 }
@@ -94,15 +95,15 @@ UMaterial* UGTCaptureComponent::GetMaterial(FString InModeName = TEXT(""))
 /**
 Attach a GTCaptureComponent to an actor
 */
-UGTCaptureComponent* UGTCaptureComponent::Create(AActor* InActor, TArray<FString> Modes, UWorld* World, USceneComponent* AttachComponent)
+UGTCaptureComponents* UGTCaptureComponents::Create(AActor* InActor, TArray<FString> Modes, UWorld* World, USceneComponent* AttachComponent)
 {
-	UGTCaptureComponent* GTCapturer = NewObject<UGTCaptureComponent>();
+	UGTCaptureComponents* GTCapturer = NewObject<UGTCaptureComponents>();
 
 	GTCapturer->bIsActive = true;
 	// check(GTCapturer->IsComponentTickEnabled() == true);
 	GTCapturer->Actor = InActor;
 
-							   // This snippet is from Engine/Source/Runtime/Engine/Private/Components/SceneComponent.cpp, AttachTo
+	// This snippet is from Engine/Source/Runtime/Engine/Private/Components/SceneComponent.cpp, AttachTo
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepRelative, false);
 	ConvertAttachLocation(EAttachLocation::KeepRelativeOffset, AttachmentRules.LocationRule, AttachmentRules.RotationRule, AttachmentRules.ScaleRule);
 	GTCapturer->AttachToComponent(AttachComponent, AttachmentRules);
@@ -138,7 +139,7 @@ UGTCaptureComponent* UGTCaptureComponent::Create(AActor* InActor, TArray<FString
 			CaptureComponent->TextureTarget->TargetGamma = 1;
 			if (Mode == "object_mask") // For object mask
 			{
-				// FViewMode::Lit(CaptureComponent->ShowFlags);
+				//FViewMode::Lit(CaptureComponent->ShowFlags);
 				FViewMode::VertexColor(CaptureComponent->ShowFlags);
 			}
 			else if (Mode == "wireframe") // For object mask
@@ -160,7 +161,7 @@ UGTCaptureComponent* UGTCaptureComponent::Create(AActor* InActor, TArray<FString
 	return GTCapturer;
 }
 
-UGTCaptureComponent::UGTCaptureComponent()
+UGTCaptureComponents::UGTCaptureComponents()
 {
 	GetMaterial(); // Initialize the TMap
 	PrimaryComponentTick.bCanEverTick = true;
@@ -173,7 +174,7 @@ UGTCaptureComponent::UGTCaptureComponent()
 
 // Each GTCapturer can serve as one camera of the scene
 
-void UGTCaptureComponent::SetFOVAngle(float FOV)
+void UGTCaptureComponents::SetFOVAngle(float FOV)
 {
 	for (auto Iterator = CaptureComponents.CreateIterator(); Iterator; ++Iterator)
 	{
@@ -181,7 +182,7 @@ void UGTCaptureComponent::SetFOVAngle(float FOV)
 	}
 }
 
-void UGTCaptureComponent::Capture(FString Mode, FString InFilename)
+void UGTCaptureComponents::Capture(FString Mode, FString InFilename)
 {
 	// Flush location and rotation
 
@@ -193,7 +194,7 @@ void UGTCaptureComponent::Capture(FString Mode, FString InFilename)
 
 }
 
-TArray<uint8> UGTCaptureComponent::CapturePng(FString Mode)
+TArray<uint8> UGTCaptureComponents::CapturePng(FString Mode)
 {
 	// Flush location and rotation
 	check(CaptureComponents.Num() != 0);
@@ -216,14 +217,38 @@ TArray<uint8> UGTCaptureComponent::CapturePng(FString Mode)
 	ReadSurfaceDataFlags.SetLinearToGamma(false); // This is super important to disable this!
 												  // Instead of using this flag, we will set the gamma to the correct value directly
 	RenderTargetResource->ReadPixels(Image, ReadSurfaceDataFlags);
-	ImageWrapper->SetRaw(Image.GetData(), Image.GetAllocatedSize(), Width, Height, ERGBFormat::BGRA, 8);
-	ImgData = ImageWrapper->GetCompressed();
+	//ImageWrapper->SetRaw(Image.GetData(), Image.GetAllocatedSize(), Width, Height, ERGBFormat::BGRA, 8);
+	//ImgData = ImageWrapper->GetCompressed();
 
+	ImgData = SerializationUtils::Image2Png(Image, Width, Height);
 	return ImgData;
 }
 
-TArray<uint8> UGTCaptureComponent::CaptureNpyUint8(FString Mode, int32 Channels)
+TArray<uint8> UGTCaptureComponents::CaptureExr(FString Mode)
 {
+	check(CaptureComponents.Num() != 0);
+	USceneCaptureComponent2D* CaptureComponent = CaptureComponents.FindRef(Mode);
+
+	TArray<uint8> ImgData;
+	if (CaptureComponent == nullptr)
+		return ImgData;
+
+	UTextureRenderTarget2D* RenderTarget = CaptureComponent->TextureTarget;
+	static IImageWrapperModule& ImageWrapperModule = FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
+	static TSharedPtr<IImageWrapper> ImageWrapper = ImageWrapperModule.CreateImageWrapper(EImageFormat::PNG);
+	int32 Width = RenderTarget->SizeX, Height = RenderTarget->SizeY;
+	TArray<FFloat16Color> FloatImage;
+	FloatImage.AddZeroed(Width * Height);
+	FTextureRenderTargetResource* RenderTargetResource = RenderTarget->GameThread_GetRenderTargetResource();
+	RenderTargetResource->ReadFloat16Pixels(FloatImage);
+
+	TArray<uint8> ExrData = SerializationUtils::Image2Exr(FloatImage, Width, Height);
+	return ExrData;
+}
+
+TArray<uint8> UGTCaptureComponents::CaptureNpyUint8(FString Mode, int32 Channels)
+{
+
 	// Flush location and rotation
 	check(CaptureComponents.Num() != 0);
 	USceneCaptureComponent2D* CaptureComponent = CaptureComponents.FindRef(Mode);
@@ -253,7 +278,7 @@ TArray<uint8> UGTCaptureComponent::CaptureNpyUint8(FString Mode, int32 Channels)
 	return NpyData;
 }
 
-TArray<uint8> UGTCaptureComponent::CaptureNpyFloat16(FString Mode, int32 Channels)
+TArray<uint8> UGTCaptureComponents::CaptureNpyFloat16(FString Mode, int32 Channels)
 {
 	// Flush location and rotation
 	check(CaptureComponents.Num() != 0);
@@ -281,7 +306,7 @@ TArray<uint8> UGTCaptureComponent::CaptureNpyFloat16(FString Mode, int32 Channel
 	return NpyData;
 }
 
-TArray<uint8> UGTCaptureComponent::NpySerialization(TArray<FColor> ImageData, int32 Width, int32 Height, int32 Channel)
+TArray<uint8> UGTCaptureComponents::NpySerialization(TArray<FColor> ImageData, int32 Width, int32 Height, int32 Channel)
 {
 	uint8 *TypePointer = nullptr; // Only used for determing the type
 
@@ -345,7 +370,7 @@ TArray<uint8> UGTCaptureComponent::NpySerialization(TArray<FColor> ImageData, in
 	return BinaryData;
 }
 
-TArray<uint8> UGTCaptureComponent::NpySerialization(TArray<FFloat16Color> ImageData, int32 Width, int32 Height, int32 Channel)
+TArray<uint8> UGTCaptureComponents::NpySerialization(TArray<FFloat16Color> ImageData, int32 Width, int32 Height, int32 Channel)
 {
 	float *TypePointer = nullptr; // Only used for determing the type
 
@@ -401,7 +426,7 @@ TArray<uint8> UGTCaptureComponent::NpySerialization(TArray<FFloat16Color> ImageD
 	return BinaryData;
 }
 
-void UGTCaptureComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UGTCaptureComponents::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 // void UGTCaptureComponent::Tick(float DeltaTime) // This tick function should be called by the scene instead of been
 {
 	// Render pixels out in the next tick. To allow time to render images out.
@@ -448,7 +473,7 @@ void UGTCaptureComponent::TickComponent(float DeltaTime, enum ELevelTick TickTyp
 	}
 }
 
-USceneCaptureComponent2D* UGTCaptureComponent::GetCaptureComponent(FString Mode)
+USceneCaptureComponent2D* UGTCaptureComponents::GetCaptureComponent(FString Mode)
 {
 	check(CaptureComponents.Num() != 0);
 	USceneCaptureComponent2D* CaptureComponent = CaptureComponents.FindRef(Mode);

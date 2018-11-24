@@ -38,7 +38,7 @@ private:
 	AStaticMeshActor* Door;
 	UStaticMeshComponent* DoorHandle;
 	ACentralCommunicator* Communicator;
-	UGTCaptureComponent* CapComp;
+	UGTCaptureComponents* CapComp;
 	uint64 RecordApplied;
 	TArray<FString> ApplyPoseArray;
 	float StepInterval;

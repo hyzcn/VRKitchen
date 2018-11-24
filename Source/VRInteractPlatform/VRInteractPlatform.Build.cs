@@ -17,6 +17,7 @@ public class VRInteractPlatform : ModuleRules
             "Networking", 
             "ImageWrapper", 
             "CinematicCamera",
+            "RenderCore"
         }
             );
 

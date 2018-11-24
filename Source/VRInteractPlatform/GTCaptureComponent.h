@@ -14,21 +14,21 @@ struct FGTCaptureTask
 	uint64 CurrentFrame;
 	FGTCaptureTask() {}
 	FGTCaptureTask(FString InMode, FString InFilename, uint64 InCurrentFrame) :
-		Mode(InMode), Filename(InFilename), CurrentFrame(InCurrentFrame){}
+		Mode(InMode), Filename(InFilename), CurrentFrame(InCurrentFrame) {}
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class VRINTERACTPLATFORM_API UGTCaptureComponent : public USceneComponent
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class VRINTERACTPLATFORM_API UGTCaptureComponents : public USceneComponent
 {
 	GENERATED_BODY()
 private:
-	UGTCaptureComponent();
+	UGTCaptureComponents();
 	AActor* Actor;
 
+public:
 	TArray<uint8> NpySerialization(TArray<FColor> ImageData, int32 Width, int32 Height, int32 Channel);
 	TArray<uint8> NpySerialization(TArray<FFloat16Color> ImageData, int32 Width, int32 Height, int32 Channel);
 
-public:
 	static UMaterial* GetMaterial(FString ModeName);
 
 	// virtual void Tick(float DeltaTime) override; // TODO
@@ -36,7 +36,7 @@ public:
 
 	void SetFOVAngle(float FOV);
 
-	static UGTCaptureComponent* Create(AActor* InActor, TArray<FString> Modes, UWorld* World, USceneComponent* AttachComponent);
+	static UGTCaptureComponents* Create(AActor* InActor, TArray<FString> Modes, UWorld* World, USceneComponent* AttachComponent);
 
 	/** Read binary data in png format */
 	TArray<uint8> CapturePng(FString Mode);
@@ -54,11 +54,12 @@ public:
 	/** Save image to a file */
 	void Capture(FString Mode, FString InFilename);
 
+	TArray<uint8> CaptureExr(FString Mode);
+
 private:
 	const bool bIsTicking = true;
 
 	TQueue<FGTCaptureTask, EQueueMode::Spsc> PendingTasks;
 	TMap<FString, USceneCaptureComponent2D*> CaptureComponents;
-	
-};
 
+};
