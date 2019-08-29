@@ -101,10 +101,10 @@ void ATouchGameModePlay::UpdateAnim()
 		FString HumanRecord = ApplyPoseArray[RecordApplied];
 		HumanPawn->UpdateAnim(HumanRecord);
 		//TakeScreenShot();
-		// recordRgb();
+		recordRgb();
 		// recordMask();
 		// recordDepth();
-		// RecordApplied += 10;
+		RecordApplied += 10;
 		// UE_LOG(LogTemp, Warning, TEXT("Applied record: %s"), RecordApplied);
 	}
 
