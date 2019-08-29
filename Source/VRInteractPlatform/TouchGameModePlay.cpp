@@ -15,7 +15,7 @@ void ATouchGameModePlay::BeginPlay()
 	UWorld* World = GetWorld();
 	FString SegmentPoints = "";
 	GameDir = FPaths::GameDir();
-	FString FileName = GameDir + "abcde.csv";
+	FString FileName = GameDir + "HumanPoseRecord2.csv";
 	IsPause = false;
 	RecordSegment = true;
 
@@ -101,7 +101,7 @@ void ATouchGameModePlay::UpdateAnim()
 		FString HumanRecord = ApplyPoseArray[RecordApplied];
 		HumanPawn->UpdateAnim(HumanRecord);
 		//TakeScreenShot();
-		//recordRgb();
+		recordRgb();
 		// recordMask();
 		// recordDepth();
 		RecordApplied += 10;
