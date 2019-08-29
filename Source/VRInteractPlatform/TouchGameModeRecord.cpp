@@ -43,7 +43,8 @@ void ATouchGameModeRecord::BeginPlay()
 	if (PoseRecord)
 	{
 		GameDir = FPaths::GameDir();
-		FileName = GameDir + "HumanBaxterPoseRecord.csv";
+		//FileName = GameDir + "HumanBaxterPoseRecord.csv";
+		FileName = GameDir + "folding11.csv";
 		FileNameObj = GameDir + "ObjFluentRecord.csv";
 
 		if (FPaths::FileExists(FileName))
